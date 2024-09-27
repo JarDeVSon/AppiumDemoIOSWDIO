@@ -31,34 +31,22 @@ jobs:
         run: |
           npm install -g appium
 
-      - name: Clone WebDriverAgent
-        run: |
-          git clone https://github.com/appium/WebDriverAgent.git
-          cd WebDriverAgent
-
-      - name: Install Dependencies for WebDriverAgent
-        run: |
-          cd WebDriverAgent
-          npm install
-
-      - name: Set up Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+      - uses: muukii/actions-xcode-install-simulator@main
         with:
-          xcode-version: 'latest'
+            ios_version: '18.1'
+      - uses: muukii/actions-xcode-create-simulator@main
+        id: target
+        with:
+          device: 'iPhone 16'
+          runtime: '18.1'
 
-      - name: Build WebDriverAgent
-        run: |
-          cd WebDriverAgent
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 14' test
+      - run: echo ${{ steps.target.outputs.uuid }}         
 
       - name: Start up Appium
         run: |
           nohup appium -p 4723 -pa /wd/hub &
 
-      - name: Boot iOS Simulator
-        run: |
-          xcrun simctl boot "iPhone 16"
-          xcrun simctl bootstatus "iPhone 16" -b
+
 
       - name: Run iOS Tests
         run: |
