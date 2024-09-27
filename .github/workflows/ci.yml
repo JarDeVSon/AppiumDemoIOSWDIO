@@ -1,0 +1,78 @@
+name: Continuous Integration - iOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  execute_test:
+    runs-on: macos-latest  # Rodar em um ambiente macOS para suporte ao simulador iOS
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Appium
+        run: |
+          npm install -g appium
+
+      - name: Install XCUITest Driver
+        run: |
+          appium driver install xcuitest
+
+      - name: Install Xcode tools
+        run: |
+          xcode-select --install
+          
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest'
+
+      - name: Install WebDriverAgent dependencies
+        run: |
+          git clone https://github.com/appium/WebDriverAgent.git
+          cd WebDriverAgent
+          mkdir -p Resources/WebDriverAgent.bundle
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16' test
+
+      - name: Start up Appium
+        run: |
+          nohup appium -p 4723 -pa /wd/hub &
+
+      - name: Boot iOS Simulator
+        run: |
+          xcrun simctl boot "iPhone 16"
+          xcrun simctl bootstatus "iPhone 16" -b
+
+      - name: Run iOS Tests
+        run: |
+          robot -d reports tests/
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports
+          path: "**/reports/"
+
+      - name: Implantar Resultados no Github Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: "**/reports/"
