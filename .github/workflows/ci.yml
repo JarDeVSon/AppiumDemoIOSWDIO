@@ -39,6 +39,11 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: 'latest'
+          
+      - name: Grant Xcode Permissions
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          sudo xcodebuild -license accept
 
       - name: Clone WebDriverAgent
         run: |
@@ -49,11 +54,6 @@ jobs:
         run: |
           cd WebDriverAgent
           xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
-      
-      - name: Grant Xcode Permissions
-        run: |
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-          sudo xcodebuild -license accept
 
       - name: Boot iOS Simulator
         run: |
