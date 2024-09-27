@@ -16,7 +16,7 @@ Test Setup        Open Application
 ...    remote_url=http://127.0.0.1:4723    
 ...    platformName=ios    
 ...    appium:automationName=xcuitest    
-...    appium:deviceName=iPhone    
+...    appium:deviceName=iPhone 16    
 ...    appium:platformVersion=18.0    
 ...    appium:udid=2981B5EA-55D2-4189-8600-19FEE2040355    
 ...    appium:noReset=${False}    
