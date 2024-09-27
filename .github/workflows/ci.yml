@@ -37,12 +37,12 @@ jobs:
           
       - uses: muukii/actions-xcode-install-simulator@main
         with:
-          ios_version: '18.0'
+          ios_version: '13.7'
       - uses: muukii/actions-xcode-create-simulator@main
         id: target
         with:
           device: 'iPhone 16'
-          runtime: '18.0'
+          runtime: '13.7'
 
       - run: echo ${{ steps.target.outputs.uuid }}
 
