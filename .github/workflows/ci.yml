@@ -50,6 +50,7 @@ jobs:
         
       - name: Configure WebDriverAgent
         run: |
+          cd WebDriverAgent
           mkdir -p build
           xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' build-for-testing
         
