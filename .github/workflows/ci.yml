@@ -33,7 +33,8 @@ jobs:
 
       - uses: muukii/actions-xcode-install-simulator@main
         with:
-            ios_version: '18.1'
+          ios_version: '18.1'
+          
       - uses: muukii/actions-xcode-create-simulator@main
         id: target
         with:
@@ -45,8 +46,6 @@ jobs:
       - name: Start up Appium
         run: |
           nohup appium -p 4723 -pa /wd/hub &
-
-
 
       - name: Run iOS Tests
         run: |
