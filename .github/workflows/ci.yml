@@ -46,6 +46,7 @@ jobs:
 
       - name: Boot iOS Simulator
         run: |
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16' test
           xcrun simctl boot "iPhone 16"
           xcrun simctl bootstatus "iPhone 16" -b
 
