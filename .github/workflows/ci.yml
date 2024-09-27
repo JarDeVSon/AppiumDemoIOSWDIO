@@ -34,10 +34,6 @@ jobs:
       - name: Install XCUITest Driver
         run: |
           appium driver install xcuitest
-
-      - name: Install Xcode tools
-        run: |
-          xcode-select --install
           
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
