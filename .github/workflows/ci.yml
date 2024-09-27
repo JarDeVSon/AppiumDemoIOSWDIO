@@ -48,12 +48,12 @@ jobs:
       - name: Build WebDriverAgent
         run: |
           cd WebDriverAgent
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
 
       - name: Boot iOS Simulator
         run: |
-          xcrun simctl boot "iPhone 14"
-          xcrun simctl bootstatus "iPhone 14" -b
+          xcrun simctl boot "iPhone 16"
+          xcrun simctl bootstatus "iPhone 16" -b
 
       - name: Start up Appium
         run: |
