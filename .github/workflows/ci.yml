@@ -40,13 +40,6 @@ jobs:
         with:
           xcode-version: 'latest'
 
-      - name: Install WebDriverAgent dependencies
-        run: |
-          git clone https://github.com/appium/WebDriverAgent.git
-          cd WebDriverAgent
-          mkdir -p Resources/WebDriverAgent.bundle
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16' test
-
       - name: Start up Appium
         run: |
           nohup appium -p 4723 -pa /wd/hub &
