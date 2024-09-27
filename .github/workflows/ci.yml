@@ -63,7 +63,7 @@ jobs:
 
       - name: Start up Appium
         run: |
-          appium
+          nohup appium -p http://127.0.0.1:4723  -pa /wd/hub &
 
 
       - name: Run iOS Tests
