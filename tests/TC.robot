@@ -13,12 +13,12 @@ Library           AppiumLibrary
 ...    run_on_failure=Capture Page Screenshot    
 ...    sleep_between_wait_loop=0.2
 Test Setup        Open Application    
-...    remote_url=http://127.0.0.1:4723    
+...    remote_url=http://127.0.0.1:4723/wd/hub    
 ...    platformName=ios    
 ...    appium:automationName=xcuitest    
-...    appium:deviceName=iPhone 16    
+...    appium:deviceName=iPhone    
 ...    appium:platformVersion=18.0    
-...    appium:udid=2981B5EA-55D2-4189-8600-19FEE2040355    
+...    appium:udid=5FBB2585-CE24-4954-ABE6-95B257451381   
 ...    appium:noReset=${False}    
 ...    appium:fullReset=${False}    
 ...    appium:printPageSourceOnFindFailure=${False}    
