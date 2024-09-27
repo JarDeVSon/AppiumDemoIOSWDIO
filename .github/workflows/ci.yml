@@ -63,7 +63,7 @@ jobs:
 
       - name: Start up Appium
         run: |
-          nohup appium -p 4723 -pa /wd/hub &
+          appium
 
 
       - name: Run iOS Tests
