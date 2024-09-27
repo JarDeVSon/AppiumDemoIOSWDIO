@@ -31,17 +31,15 @@ jobs:
         run: |
           npm install -g appium
 
-      - uses: muukii/actions-xcode-install-simulator@main
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          ios_version: '13.7'
+          xcode-version: 'latest'
 
-      - uses: muukii/actions-xcode-create-simulator@main
-        id: target
-        with:
-          device: 'iPhone 16'
-          runtime: '13.7'
-
-      - run: echo ${{ steps.target.outputs.uuid }}         
+      - name: Boot iOS Simulator
+        run: |
+          xcrun simctl boot "iPhone 16"
+          xcrun simctl bootstatus "iPhone 16" -b
 
       - name: Start up Appium
         run: |
