@@ -18,7 +18,7 @@ Test Setup        Open Application
 ...    appium:automationName=xcuitest    
 ...    appium:deviceName=iPhone    
 ...    appium:platformVersion=18.0    
-...    appium:udid=${env.UDID}  
+...    appium:udid=${UDID}  
 ...    appium:noReset=${False}    
 ...    appium:fullReset=${False}    
 ...    appium:printPageSourceOnFindFailure=${False}    
@@ -30,7 +30,8 @@ Test Setup        Open Application
 ...    disableIdLocatorAutocompletion=${True}
 Test Teardown     Close All Applications
 Resource    ../resources/pages/signupPage.resource
-
+*** Variables ***
+${UDID}    5FBB2585-CE24-4954-ABE6-95B257451381
 
 *** Test Cases ***
 Test Recorder Appium 1
