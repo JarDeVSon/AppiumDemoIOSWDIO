@@ -52,12 +52,15 @@ jobs:
         run: |
           xcrun simctl shutdown all
 
-      - name: Configure WebDriverAgent
+      # Apenas compila o WebDriverAgent para o simulador, necessário para o Appium
+      - name: Build WebDriverAgent for Testing
         run: |
           cd WebDriverAgent
-          mkdir -p build
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
-     
+          xcodebuild -project WebDriverAgent.xcodeproj \
+            -scheme WebDriverAgentRunner \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
+            build-for-testing
+            
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
