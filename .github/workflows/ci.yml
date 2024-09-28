@@ -83,7 +83,7 @@ jobs:
 
       - name: Run iOS Tests
         run: |
-          robot -d reports tests/
+          robot -d reports -v UDID:${{ env.UDID }} tests/
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
