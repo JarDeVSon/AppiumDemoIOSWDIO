@@ -47,11 +47,7 @@ jobs:
           
       - name: Accept Xcode License
         run: sudo xcodebuild -license accept
-        
-      - name: Shutdown any running simulator
-        run: |
-          xcrun simctl shutdown all
-
+      
       # Apenas compila o WebDriverAgent para o simulador, necessário para o Appium
       - name: Build WebDriverAgent for Testing
         run: |
@@ -73,9 +69,6 @@ jobs:
             UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
           fi
           echo "UDID=$UDID" >> $GITHUB_ENV
-
-      - name: Boot iOS Simulator
-        run: |
           xcrun simctl boot "${{ env.UDID }}"
           xcrun simctl bootstatus "${{ env.UDID }}" -b
           sleep 60  # Tempo adicional para garantir que o simulador esteja ativo
@@ -89,10 +82,6 @@ jobs:
             echo "Waiting for Appium server to be ready..."
             sleep 10
           done
-
-      - name: Show UDID
-        run:  |
-          echo "Captured UDID: ${{ env.UDID }}"
 
       - name: Run iOS Tests
         run: |
