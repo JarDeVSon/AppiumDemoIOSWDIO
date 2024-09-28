@@ -75,8 +75,8 @@ jobs:
 
       - name: Start up Appium
         run: |
-          nohup appium -p 4723 -pa /wd/hub --log-level debug &
-          sleep 15
+          nohup appium --log-level debug &
+          
 
       - name: Show UDID
         run:  |
