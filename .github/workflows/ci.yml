@@ -58,6 +58,15 @@ jobs:
           mkdir -p build
           xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' build-for-testing
 
+      # Roda os testes do WebDriverAgent no simulador iPhone
+      - name: Run WebDriverAgent Tests
+        run: |
+          cd WebDriverAgent
+          xcodebuild -project WebDriverAgent.xcodeproj \
+            -scheme WebDriverAgentRunner \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
+            test-without-building
+                      
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
