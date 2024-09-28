@@ -19,7 +19,7 @@ Test Setup        Open Application
 ...    appium:deviceName=iPhone    
 ...    appium:platformVersion=18.0    
 ...    appium:udid=${UDID}  
-...    appium:noReset=${False}    
+...    appium:noReset=${True}    
 ...    appium:fullReset=${False}    
 ...    appium:printPageSourceOnFindFailure=${False}    
 ...    appium:bundleId=org.reactjs.native.example.wdiodemoapp    
