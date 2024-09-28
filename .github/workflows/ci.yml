@@ -57,6 +57,7 @@ jobs:
           cd WebDriverAgent
           mkdir -p build
           xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' build-for-testing
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'id=${{ env.UDID }}' test
 
       - name: List Available Simulators
         run: |
@@ -77,10 +78,6 @@ jobs:
           xcrun simctl bootstatus "${{ env.UDID }}" -b
           sleep 60  # Tempo adicional para garantir que o simulador esteja ativo
           
-      - name: Start WebDriverAgent
-        run: |
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'id=${{ env.UDID }}' test
-
       - name: Wait for Appium server
         run: |
           nohup appium -p 4725 -pa /wd/hub --log-level debug &
