@@ -73,17 +73,19 @@ jobs:
           xcrun simctl bootstatus "${{ env.UDID }}" -b
           sleep 15  # Tempo adicional para garantir que o simulador esteja ativo
 
-
       - name: Start up Appium
         run: |
           nohup appium -p 4723 -pa /wd/hub --log-level debug &
-          sleep 10
-          echo "Using UDID: ${{ env.UDID }}"
+          sleep 15
 
+      - name: Show UDID
+        run:  |
+          echo "Captured UDID: ${{ env.UDID }}"
 
       - name: Run iOS Tests
         run: |
-          robot -d reports -v UDID:${{ env.UDID }} tests/
+          export UDID=${{ env.UDID }}
+          robot -d reports -v UDID:$UDID tests/
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
