@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-
+          
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -30,11 +30,11 @@ jobs:
       - name: Install Appium
         run: |
           npm install -g appium
-
+          
       - name: Install XCUITest Driver for Appium
         run: |
           appium driver install xcuitest
-
+          
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -44,10 +44,14 @@ jobs:
         run: |
           git clone https://github.com/appium/WebDriverAgent.git
           cd WebDriverAgent
-
+          
       - name: Accept Xcode License
         run: sudo xcodebuild -license accept
         
+      - name: Shutdown any running simulator
+        run: |
+          xcrun simctl shutdown all
+
       - name: Configure WebDriverAgent
         run: |
           cd WebDriverAgent
@@ -57,7 +61,7 @@ jobs:
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
-
+          
       - name: Get UDID of iPhone 16
         id: udid
         run: |
@@ -71,14 +75,22 @@ jobs:
         run: |
           xcrun simctl boot "${{ env.UDID }}"
           xcrun simctl bootstatus "${{ env.UDID }}" -b
-          sleep 30  # Tempo adicional para garantir que o simulador esteja ativo
+          sleep 60  # Tempo adicional para garantir que o simulador esteja ativo
+          
+      - name: Start WebDriverAgent
+        run: |
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'id=${{ env.UDID }}' test
 
-      - name: Start up Appium
+      - name: Wait for Appium server
         run: |
           nohup appium -p 4725 -pa /wd/hub --log-level debug &
-          sleep 30  # Aguarde um tempo para garantir que o Appium esteja rodando
-          curl http://127.0.0.1:4725/wd/hub/status  # Verifique se o Appium está rodando
-          
+          sleep 30  # Aguarde para garantir que o Appium esteja rodando
+          for i in {1..10}; do
+            curl -s http://127.0.0.1:4725/wd/hub/status && break
+            echo "Waiting for Appium server to be ready..."
+            sleep 10
+          done
+
       - name: Show UDID
         run:  |
           echo "Captured UDID: ${{ env.UDID }}"
@@ -87,7 +99,7 @@ jobs:
         run: |
           export UDID=${{ env.UDID }}
           robot -d reports -v UDID:${{ env.UDID }} tests/
-
+          
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
