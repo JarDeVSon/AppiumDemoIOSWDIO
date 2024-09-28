@@ -56,17 +56,8 @@ jobs:
         run: |
           cd WebDriverAgent
           mkdir -p build
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' build-for-testing
-
-      # Roda os testes do WebDriverAgent no simulador iPhone
-      - name: Run WebDriverAgent Tests
-        run: |
-          cd WebDriverAgent
-          xcodebuild -project WebDriverAgent.xcodeproj \
-            -scheme WebDriverAgentRunner \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
-            test-without-building
-                      
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
+     
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
@@ -80,11 +71,6 @@ jobs:
           fi
           echo "UDID=$UDID" >> $GITHUB_ENV
 
-      - name: Start WebDriverAgent
-        run: |
-          export UDID=${{ env.UDID }}
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination "id=${{ env.UDID }}" test
-          
       - name: Boot iOS Simulator
         run: |
           xcrun simctl boot "${{ env.UDID }}"
