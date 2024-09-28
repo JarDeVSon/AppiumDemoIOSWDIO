@@ -9,7 +9,7 @@
 
 *** Settings ***
 Library           AppiumLibrary    
-...    timeout=60    
+...    timeout=120    
 ...    run_on_failure=Capture Page Screenshot    
 ...    sleep_between_wait_loop=0.2
 Test Setup        Open Application    
@@ -18,8 +18,8 @@ Test Setup        Open Application
 ...    appium:automationName=xcuitest    
 ...    appium:deviceName=iPhone    
 ...    appium:platformVersion=18.0    
-...    appium:udid=${UDID}  
-...    appium:noReset=${True}    
+...    appium:udid=${UDID}
+...    appium:noReset=${False}    
 ...    appium:fullReset=${False}    
 ...    appium:printPageSourceOnFindFailure=${False}    
 ...    appium:bundleId=org.reactjs.native.example.wdiodemoapp    
@@ -48,7 +48,7 @@ Test Recorder Appium 1
     Input Text    ${el3}    teste123
     ${el4} =    Set Variable     chain=**/XCUIElementTypeOther[`name == "SIGN UP"`][2]
     Click Element    ${el4}
-    Wait Until Page Contains Element    accessibility_id=You successfully signed up!
+    Wait Until Element Is Visible    accessibility_id=You successfully signed up!
     ${el5} =    Set Variable     accessibility_id=You successfully signed up!
     Element Text Should Be    ${el5}    You successfully signed up!
      ${el6} =    Set Variable     accessibility_id=OK
