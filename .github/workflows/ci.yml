@@ -69,8 +69,8 @@ jobs:
             UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
           fi
           echo "UDID=$UDID" >> $GITHUB_ENV
-          xcrun simctl boot "${{ env.UDID }}"
-          xcrun simctl bootstatus "${{ env.UDID }}" -b
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
           sleep 60  # Tempo adicional para garantir que o simulador esteja ativo
           
       - name: Wait for Appium server
