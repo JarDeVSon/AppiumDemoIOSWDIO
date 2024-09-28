@@ -57,7 +57,6 @@ jobs:
           cd WebDriverAgent
           mkdir -p build
           xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' build-for-testing
-          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'id=${{ env.UDID }}' test
 
       - name: List Available Simulators
         run: |
@@ -72,6 +71,11 @@ jobs:
           fi
           echo "UDID=$UDID" >> $GITHUB_ENV
 
+      - name: Start WebDriverAgent
+        run: |
+          export UDID=${{ env.UDID }}
+          xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination "id=${{ env.UDID }}" test
+          
       - name: Boot iOS Simulator
         run: |
           xcrun simctl boot "${{ env.UDID }}"
