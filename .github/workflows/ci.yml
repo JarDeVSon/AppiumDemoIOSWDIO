@@ -71,7 +71,7 @@ jobs:
         run: |
           xcrun simctl boot "${{ env.UDID }}"
           xcrun simctl bootstatus "${{ env.UDID }}" -b
-          sleep 15  # Tempo adicional para garantir que o simulador esteja ativo
+          sleep 30  # Tempo adicional para garantir que o simulador esteja ativo
 
       - name: Start up Appium
         run: |
