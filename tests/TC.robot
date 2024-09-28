@@ -24,7 +24,8 @@ Test Setup        Open Application
 ...    appium:printPageSourceOnFindFailure=${False}    
 ...    appium:bundleId=org.reactjs.native.example.wdiodemoapp    
 ...    appium:app=${CURDIR}${/}..${/}resources${/}app${/}wdiodemoapp.app   
-...    appium:includeSafariInWebviews=${True}    
+...    appium:includeSafariInWebviews=${True} 
+...    appium:wdaLaunchTimeout=120000   
 ...    appium:newCommandTimeout=${3600}    
 ...    appium:connectHardwareKeyboard=${True}    
 ...    disableIdLocatorAutocompletion=${True}
