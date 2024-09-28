@@ -18,7 +18,7 @@ Test Setup        Open Application
 ...    appium:automationName=xcuitest    
 ...    appium:deviceName=iPhone    
 ...    appium:platformVersion=18.0    
-...    appium:udid=${env.UDID}  
+...    appium:udid=5FBB2585-CE24-4954-ABE6-95B257451381   
 ...    appium:noReset=${False}    
 ...    appium:fullReset=${False}    
 ...    appium:printPageSourceOnFindFailure=${False}    

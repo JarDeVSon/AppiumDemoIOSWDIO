@@ -54,10 +54,17 @@ jobs:
           mkdir -p build
           xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' build-for-testing
 
+      - name: List Available Simulators
+        run: |
+          xcrun simctl list devices
+
       - name: Get UDID of iPhone 16
         id: udid
         run: |
-          UDID=$(xcrun simctl list devices | grep -m 1 "iPhone 16 (iOS 18)" | awk -F '[()]' '{print $2}')
+          UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Booted" | awk -F '[()]' '{print $2}')
+          if [ -z "$UDID" ]; then
+            UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
+          fi
           echo "UDID=$UDID" >> $GITHUB_ENV
 
       - name: Boot iOS Simulator
@@ -65,6 +72,7 @@ jobs:
           xcrun simctl boot "${{ env.UDID }}"
           xcrun simctl bootstatus "${{ env.UDID }}" -b
           sleep 30  # Tempo adicional para garantir que o simulador esteja ativo
+
 
       - name: Start up Appium
         run: |
