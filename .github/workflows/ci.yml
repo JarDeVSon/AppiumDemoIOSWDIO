@@ -76,8 +76,9 @@ jobs:
       - name: Start up Appium
         run: |
           nohup appium -p 4725 -pa /wd/hub --log-level debug &
+          sleep 30  # Aguarde um tempo para garantir que o Appium esteja rodando
+          curl http://127.0.0.1:4723/wd/hub/status  # Verifique se o Appium está rodando
           
-
       - name: Show UDID
         run:  |
           echo "Captured UDID: ${{ env.UDID }}"
