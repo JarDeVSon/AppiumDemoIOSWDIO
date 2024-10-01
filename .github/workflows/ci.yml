@@ -48,7 +48,7 @@ jobs:
       - name: Accept Xcode License
         run: sudo xcodebuild -license accept
       
-      # Apenas compila o WebDriverAgent para o simulador, necessário para o Appium
+      # Compila o WebDriverAgent para o simulador
       - name: Build WebDriverAgent for Testing
         run: |
           cd WebDriverAgent
@@ -71,21 +71,24 @@ jobs:
           echo "UDID=$UDID" >> $GITHUB_ENV
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
-          sleep 300  # Tempo adicional para garantir que o simulador esteja ativo
+          sleep 360  # Tempo adicional para garantir que o simulador esteja ativo
           
       - name: Wait for Appium server
         run: |
           nohup appium -p 4725 -pa /wd/hub --log-level debug &
-          sleep 120  # Aguarde para garantir que o Appium esteja rodando
-          for i in {1..10}; do
+          for i in {1..15}; do
             curl -s http://127.0.0.1:4725/wd/hub/status && break
             echo "Waiting for Appium server to be ready..."
-            sleep 10
+            sleep 20
           done
           export UDID=${{ env.UDID }}
           robot -d reports -v UDID:${{ env.UDID }} tests/
-
           
+      - name: Capture Appium and Simulator Logs
+        run: |
+          tail -f /path/to/appium.log &
+          tail -f ~/Library/Logs/CoreSimulator/${{ env.UDID }}/system.log &
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
