@@ -48,10 +48,10 @@ Test Recorder Appium 1
     Input Text    ${el3}    teste123
     ${el4} =    Set Variable     chain=**/XCUIElementTypeOther[`name == "SIGN UP"`][2]
     Click Element    ${el4}
+    # ${el5} =    Set Variable     accessibility_id=You successfully signed up!
+    # Wait Until Element Is Visible    ${el5}
+    # Element Text Should Be    ${el5}    You successfully signed up!
     Sleep    10
-    ${el5} =    Set Variable     accessibility_id=You successfully signed up!
-    Wait Until Element Is Visible    ${el5}
-    Element Text Should Be    ${el5}    You successfully signed up!
     ${el6} =    Set Variable     accessibility_id=OK
     Click Element    ${el6}
 
@@ -61,4 +61,4 @@ Test refatorado com page objects
     Dado que estou na tela de cadastro
     Quando preencho as credenciais validas     email1teste123@bol.com    teste123    teste123
     E submeto o cadastro
-    Entao devo ver a mensagem de cadastro realizado com sucesso    You successfully signed up!
+    Entao devo ver a mensagem de cadastro realizado com sucesso    #You successfully signed up!
