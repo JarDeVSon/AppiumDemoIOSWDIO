@@ -16,8 +16,11 @@ Quando preencho as credenciais validas
 
 E submeto o cadastro
     Click Element    ${SIGNUP_BTN}
+    Sleep    10
 
 Entao devo ver a mensagem de cadastro realizado com sucesso
     [Arguments]    ${EXPECTED}
+    
+    Wait Until Element Is Visible    ${SUCCESS_TXT}
     Element Text Should Be    ${SUCCESS_TXT}    ${EXPECTED}
     Click Element    ${OK_BTN}

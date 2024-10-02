@@ -48,9 +48,11 @@ Test Recorder Appium 1
     Input Text    ${el3}    teste123
     ${el4} =    Set Variable     chain=**/XCUIElementTypeOther[`name == "SIGN UP"`][2]
     Click Element    ${el4}
+    Sleep    10
     ${el5} =    Set Variable     accessibility_id=You successfully signed up!
+    Wait Until Element Is Visible    ${el5}
     Element Text Should Be    ${el5}    You successfully signed up!
-     ${el6} =    Set Variable     accessibility_id=OK
+    ${el6} =    Set Variable     accessibility_id=OK
     Click Element    ${el6}
 
 
