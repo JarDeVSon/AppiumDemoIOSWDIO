@@ -71,16 +71,12 @@ jobs:
           echo "UDID=$UDID" >> $GITHUB_ENV
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
-          sleep 360  # Tempo adicional para garantir que o simulador esteja ativo
+          sleep 60  # Tempo adicional para garantir que o simulador esteja ativo
           
       - name: Wait for Appium server
         run: |
-          nohup appium -p 4725 -pa /wd/hub --log-level debug &
-          for i in {1..15}; do
-            curl -s http://127.0.0.1:4725/wd/hub/status && break
-            echo "Waiting for Appium server to be ready..."
-            sleep 20
-          done
+          nohup appium -p 4723 -pa /wd/hub --log-level debug &
+          
 
       - name: Run iOS Tests
         run: |

@@ -9,11 +9,11 @@
 
 *** Settings ***
 Library           AppiumLibrary    
-...    timeout=120    
+...    timeout=60    
 ...    run_on_failure=Capture Page Screenshot    
 ...    sleep_between_wait_loop=0.2
 Test Setup        Open Application    
-...    http://127.0.0.1:4725/wd/hub
+...    http://127.0.0.1:4723
 ...    platformName=ios    
 ...    appium:automationName=xcuitest    
 ...    appium:deviceName=iPhone    
