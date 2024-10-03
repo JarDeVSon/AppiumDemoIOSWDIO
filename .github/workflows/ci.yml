@@ -81,6 +81,9 @@ jobs:
             echo "Waiting for Appium server to be ready..."
             sleep 20
           done
+
+      - name: Run iOS Tests
+        run: |
           export UDID=${{ env.UDID }}
           robot -d reports -v UDID:${{ env.UDID }} tests/
           

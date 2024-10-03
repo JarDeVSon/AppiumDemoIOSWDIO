@@ -16,7 +16,7 @@ Quando preencho as credenciais validas
 
 E submeto o cadastro
     Click Element    ${SIGNUP_BTN}
-    Sleep    10s
+    # Sleep    10s
 Entao devo ver a mensagem de cadastro realizado com sucesso
     [Arguments]    ${EXPECTED}
     Sleep    10s
