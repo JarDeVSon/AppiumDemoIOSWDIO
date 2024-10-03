@@ -79,7 +79,7 @@ jobs:
           
       - name: Wait for Appium server
         run: |
-          appium --allow-cors
+          appium
           
 
       - name: Run iOS Tests
