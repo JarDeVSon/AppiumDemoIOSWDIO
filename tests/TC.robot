@@ -49,8 +49,7 @@ Test Recorder Appium 1
     ${el4} =    Set Variable     xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]
     Wait Until Page Contains Element  ${el4}
     Click Element    ${el4}
-    Sleep    10s
-    Capture Page Screenshot
+
 
 
 
