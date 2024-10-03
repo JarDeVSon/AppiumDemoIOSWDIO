@@ -33,7 +33,7 @@ jobs:
 
       - name: Install Appium
         run: |
-          npm install -g appium
+          npm install -g appium@latest
           
       - name: Install XCUITest Driver for Appium
         run: |
