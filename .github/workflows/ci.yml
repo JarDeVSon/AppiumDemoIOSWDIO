@@ -68,24 +68,37 @@ jobs:
       - name: Get UDID of iPhone 16
         id: udid
         run: |
-          UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Booted" | awk -F '[()]' '{print $2}')
+          # Obter UDID do simulador iPhone 16, verificando se está "Booted" ou "Shutdown"
+          UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 -E "Booted|Shutdown" | awk -F '[()]' '{print $2}')
           if [ -z "$UDID" ]; then
-            UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
+            echo "Simulator not found!" >&2
+            exit 1
           fi
-          echo "UDID=$UDID" >> $GITHUB_ENV
-          xcrun simctl boot "$UDID"
-          xcrun simctl bootstatus "$UDID" -b
-          sleep 360  # Tempo adicional para garantir que o simulador esteja ativo
           
+          echo "UDID=$UDID" >> $GITHUB_ENV
+          
+          # Verifica se o simulador já está bootado
+          if ! xcrun simctl list devices | grep "iPhone 16" | grep -q "Booted"; then
+            echo "Booting the iPhone 16 simulator with UDID $UDID..."
+            xcrun simctl boot "$UDID"
+          else
+            echo "iPhone 16 simulator is already booted"
+          fi
+          
+          # Verifica o status do boot
+          xcrun simctl bootstatus "$UDID" -b
+
       - name: Wait for Appium server
         run: |
           nohup appium &> appium.log &
-          # Wait for Appium to be ready
+          
+          # Esperar o servidor Appium estar disponível na porta 4723
           while ! nc -z localhost 4723; do
             echo "Waiting for Appium to start...";
             sleep 5;
           done
           
+          echo "Appium started successfully"
 
       - name: Run iOS Tests
         run: |
@@ -108,4 +121,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
           publish_dir: "**/reports/"
