@@ -71,7 +71,11 @@ jobs:
           echo "UDID=$UDID" >> $GITHUB_ENV
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
+<<<<<<< HEAD
           sleep 60  # Tempo adicional para garantir que o simulador esteja ativo
+=======
+          sleep 300  # Tempo adicional para garantir que o simulador esteja ativo
+>>>>>>> fbe8427 (n deu)
           
       - name: Wait for Appium server
         run: |
