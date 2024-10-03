@@ -79,7 +79,7 @@ jobs:
           
       - name: Wait for Appium server
         run: |
-          nohup appium -p 4723 -pa /wd/hub --log-level debug &
+          appium --allow-cors
           
 
       - name: Run iOS Tests
