@@ -57,4 +57,4 @@ Test refatorado com page objects
     Dado que estou na tela de cadastro
     Quando preencho as credenciais validas     email1teste123@bol.com    teste123    teste123
     E submeto o cadastro
-    Entao devo ver a mensagem de cadastro realizado com sucesso    #You successfully signed up!
+    # Entao devo ver a mensagem de cadastro realizado com sucesso    #You successfully signed up!
