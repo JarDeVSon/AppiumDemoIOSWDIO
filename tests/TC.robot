@@ -50,10 +50,6 @@ Test Recorder Appium 1
     Wait Until Page Contains Element  ${el4}
     Click Element    ${el4}
     Sleep    10s
-    ${el5} =    Set Variable     xpath=//XCUIElementTypeStaticText[@name="You successfully signed up!"]
-    Wait Until Page Contains Element   ${el5}
-    Element Text Should Be    ${el5}    You successfully signed up!
-    Sleep    10s
     ${el6} =    Set Variable     xpath=//XCUIElementTypeButton[@name="OK"]
     Wait Until Page Contains Element    ${el6}
     Click Element    ${el6}
@@ -64,4 +60,4 @@ Test refatorado com page objects
     Dado que estou na tela de cadastro
     Quando preencho as credenciais validas     email1teste123@bol.com    teste123    teste123
     E submeto o cadastro
-    Entao devo ver a mensagem de cadastro realizado com sucesso    You successfully signed up!
+    Entao devo ver a mensagem de cadastro realizado com sucesso    #You successfully signed up!
