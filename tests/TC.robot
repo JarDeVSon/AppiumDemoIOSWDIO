@@ -50,9 +50,7 @@ Test Recorder Appium 1
     Wait Until Page Contains Element  ${el4}
     Click Element    ${el4}
     Sleep    10s
-    ${el6} =    Set Variable     xpath=//XCUIElementTypeButton[@name="OK"]
-    Wait Until Page Contains Element    ${el6}
-    Click Element    ${el6}
+    Capture Page Screenshot
 
 
 

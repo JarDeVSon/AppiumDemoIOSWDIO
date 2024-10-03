@@ -90,7 +90,7 @@ jobs:
       - name: Run iOS Tests
         run: |
           export UDID=${{ env.UDID }}
-          robot -d reports -v UDID:${{ env.UDID }} tests/
+          robot -d ./reports -v UDID:${{ env.UDID }} tests/
           
       - name: Capture Appium and Simulator Logs
         run: |
