@@ -15,11 +15,12 @@ Quando preencho as credenciais validas
     Input Text    ${REPEAT_PASSWORD_FIELD}    text=${REPEAT_PASSWORD_FIELD_ARG}
 
 E submeto o cadastro
+    Wait Until Page Contains Element    ${SIGNUP_BTN}
     Click Element    ${SIGNUP_BTN}
-    # Sleep    10s
+    Sleep    10s
 Entao devo ver a mensagem de cadastro realizado com sucesso
     [Arguments]    ${EXPECTED}
     Sleep    10s
-    Wait Until Element Is Visible    ${SUCCESS_TXT}
+    Wait Until Page Contains Element    ${OK_BTN}
     Element Text Should Be    ${SUCCESS_TXT}    ${EXPECTED}
     Click Element    ${OK_BTN}

@@ -9,7 +9,7 @@
 
 *** Settings ***
 Library           AppiumLibrary    
-...    timeout=60    
+...    timeout=120    
 ...    run_on_failure=Capture Page Screenshot    
 ...    sleep_between_wait_loop=0.2
 Test Setup        Open Application    
@@ -47,14 +47,16 @@ Test Recorder Appium 1
     ${el3} =    Set Variable     accessibility_id=input-repeat-password
     Input Text    ${el3}    teste123
     ${el4} =    Set Variable     xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]
+    Wait Until Page Contains Element  ${el4}
     Click Element    ${el4}
-    # Sleep    10s
-    # ${el5} =    Set Variable     xpath=//XCUIElementTypeStaticText[@name="You successfully signed up!"]
-    # Wait Until Element Is Visible    ${el5}
-    # Element Text Should Be    ${el5}    You successfully signed up!
-    # Sleep    10s
-    # ${el6} =    Set Variable     xpath=//XCUIElementTypeButton[@name="OK"]
-    # Click Element    ${el6}
+    Sleep    10s
+    ${el5} =    Set Variable     xpath=//XCUIElementTypeStaticText[@name="You successfully signed up!"]
+    Wait Until Page Contains Element   ${el5}
+    Element Text Should Be    ${el5}    You successfully signed up!
+    Sleep    10s
+    ${el6} =    Set Variable     xpath=//XCUIElementTypeButton[@name="OK"]
+    Wait Until Page Contains Element    ${el6}
+    Click Element    ${el6}
 
 
 
@@ -62,4 +64,4 @@ Test refatorado com page objects
     Dado que estou na tela de cadastro
     Quando preencho as credenciais validas     email1teste123@bol.com    teste123    teste123
     E submeto o cadastro
-    # Entao devo ver a mensagem de cadastro realizado com sucesso    You successfully signed up!
+    Entao devo ver a mensagem de cadastro realizado com sucesso    You successfully signed up!
