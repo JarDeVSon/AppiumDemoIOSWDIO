@@ -79,7 +79,12 @@ jobs:
           
       - name: Wait for Appium server
         run: |
-          appium
+          nohup appium &> appium.log &
+          # Wait for Appium to be ready
+          while ! nc -z localhost 4723; do
+            echo "Waiting for Appium to start...";
+            sleep 5;
+          done
           
 
       - name: Run iOS Tests
