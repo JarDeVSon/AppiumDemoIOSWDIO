@@ -28,9 +28,11 @@ Test Teardown     Close All Applications
 *** Test Cases ***
 Test Appium Recorder Android 
 
-    ${el1} =    Set Variable     css=*[text="Login"]
+    ${el1} =    Set Variable     xpath=//*[@text="Login"]
+    Wait Until Page Contains Element    ${el1}
     Click Element    ${el1}
     ${el2} =    Set Variable     xpath=//*[@text="Sign up"]
+    Wait Until Page Contains Element    ${el2}
     Click Element    ${el2}
     ${el3} =    Set Variable     accessibility_id=input-email
     Input Text    ${el3}    emailtesteandroid@bol.com
@@ -39,5 +41,6 @@ Test Appium Recorder Android
     ${el5} =    Set Variable     accessibility_id=input-repeat-password
     Input Text    ${el5}    teste@123
     ${el6} =    Set Variable     xpath=//*[@text="Sign up"]
+    Wait Until Page Contains Element    ${el6}
     Click Element    ${el6}
 
