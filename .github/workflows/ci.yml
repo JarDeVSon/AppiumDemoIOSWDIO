@@ -87,14 +87,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'adopt'
+          distribution: 'temurin'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: 33
-          platform: android-33
-          ndk: true
+        uses: android-actions/setup-android@v3
 
       - name: Wait for Appium server for iOS
         run: |
