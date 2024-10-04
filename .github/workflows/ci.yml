@@ -69,7 +69,8 @@ jobs:
 
           xcrun simctl bootstatus "$UDID" -b
 
-          sleep 300  # Tempo adicional para garantir que o simulador esteja ativo
+          sleep 360  # Tempo adicional para garantir que o simulador esteja ativo
+          
       - name: Wait for Appium server
         run: |
           nohup appium &> appium.log &
