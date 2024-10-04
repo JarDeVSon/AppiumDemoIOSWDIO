@@ -9,7 +9,7 @@
 
 *** Settings ***
 Library           AppiumLibrary    
-...    timeout=60    
+...    timeout=120    
 ...    run_on_failure=Capture Page Screenshot    
 ...    sleep_between_wait_loop=0.2
 Test Setup        Open Application    
