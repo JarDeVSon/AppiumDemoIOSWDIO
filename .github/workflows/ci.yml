@@ -81,7 +81,18 @@ jobs:
           xcrun simctl erase "$UDID"
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
-          sleep 300  # Tempo adicional para garantir que o simulador esteja ativo
+          
+          # Timeout para aguardar o boot do simulador
+          TIMEOUT=300  # 5 minutos
+          COUNTER=0
+          while ! xcrun simctl bootstatus "$UDID" -b; do
+            sleep 1
+            COUNTER=$((COUNTER + 1))
+            if [ $COUNTER -ge $TIMEOUT ]; then
+              echo "Timeout waiting for iOS simulator to boot."
+              exit 1
+            fi
+          done
 
       - name: Set up Java for Android Tests
         uses: actions/setup-java@v3
@@ -91,6 +102,9 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+        api-level: '34'  # Ajuste para a versão da API que deseja usar
+          enable-sdk-manager: true
 
       - name: Wait for Appium server for iOS
         run: |
