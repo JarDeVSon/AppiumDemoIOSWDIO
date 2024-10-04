@@ -35,7 +35,7 @@ Resource    ../resources/pages/signupPage.resource
 ${UDID}    5FBB2585-CE24-4954-ABE6-95B257451381
 
 *** Test Cases ***
-Test Recorder Appium 1
+Test Recorder Appium iOS
     ${el1} =    Set Variable     accessibility_id=Login
     Click Element    ${el1}
     ${el2} =    Set Variable     css=*[name="Sign up"]
