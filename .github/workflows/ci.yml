@@ -102,6 +102,24 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          api-level: '35'  # Ajuste para a versão da API que deseja usar
+          enable-sdk-manager: true
+
+      - name: Start Android Emulator
+        run: |
+          emulator -avd Medium_Phone_API_35 -no-snapshot-load &
+          # Aguardar o emulador iniciar
+          TIMEOUT=300  # 5 minutos
+          COUNTER=0
+          while ! adb shell getprop sys.boot_completed | grep -m 1 '1'; do
+            sleep 1
+            COUNTER=$((COUNTER + 1))
+            if [ $COUNTER -ge $TIMEOUT ]; then
+              echo "Timeout waiting for Android emulator to boot."
+              exit 1
+            fi
+          done
 
       - name: Wait for Appium server for iOS
         run: |
