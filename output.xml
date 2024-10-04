@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.1 (Python 3.9.13 on darwin)" generated="2024-10-04T00:14:47.166645" rpa="false" schemaversion="5">
+<robot generator="Robot 7.1 (Python 3.9.13 on darwin)" generated="2024-10-04T01:14:28.630145" rpa="false" schemaversion="5">
 <suite id="s1" name="Tests" source="/Users/runner/work/AppiumDemoIOSWDIO/AppiumDemoIOSWDIO/tests">
 <suite id="s1-s1" name="TC" source="/Users/runner/work/AppiumDemoIOSWDIO/AppiumDemoIOSWDIO/tests/TC.robot">
 <test id="s1-s1-t1" name="Test Recorder Appium 1" line="38">
@@ -27,101 +27,99 @@ Please check https://appium.io/docs/en/2.1/cli/args/
 | remote_url          | Yes    | Appium server url |
 | alias               | no     | alias             |
 | strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
-<status status="PASS" start="2024-10-04T00:14:47.542240" elapsed="424.774869"/>
+<status status="PASS" start="2024-10-04T01:14:29.329240" elapsed="533.455172"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
-<msg time="2024-10-04T00:21:52.338688" level="INFO">${el1} = accessibility_id=Login</msg>
+<msg time="2024-10-04T01:23:22.804553" level="INFO">${el1} = accessibility_id=Login</msg>
 <var>${el1}</var>
 <arg>accessibility_id=Login</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2024-10-04T00:21:52.338065" elapsed="0.000691"/>
+<status status="PASS" start="2024-10-04T01:23:22.795225" elapsed="0.009367"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:21:52.340371" level="INFO">Clicking element 'accessibility_id=Login'.</msg>
+<msg time="2024-10-04T01:23:22.805909" level="INFO">Clicking element 'accessibility_id=Login'.</msg>
 <arg>${el1}</arg>
 <doc>Click element identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:21:52.339177" elapsed="1.422330"/>
+<status status="PASS" start="2024-10-04T01:23:22.804878" elapsed="0.743889"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
-<msg time="2024-10-04T00:21:53.763057" level="INFO">${el2} = chain=**/XCUIElementTypeStaticText[`name == "Sign up"`]</msg>
+<msg time="2024-10-04T01:23:23.549116" level="INFO">${el2} = css=*[name="Sign up"]</msg>
 <var>${el2}</var>
-<arg>chain=**/XCUIElementTypeStaticText[`name == "Sign up"`]</arg>
+<arg>css=*[name="Sign up"]</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2024-10-04T00:21:53.762752" elapsed="0.000328"/>
+<status status="PASS" start="2024-10-04T01:23:23.548959" elapsed="0.000176"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:21:53.765002" level="INFO">Clicking element 'chain=**/XCUIElementTypeStaticText[`name == "Sign up"`]'.</msg>
+<msg time="2024-10-04T01:23:23.550402" level="INFO">Clicking element 'css=*[name="Sign up"]'.</msg>
 <arg>${el2}</arg>
 <doc>Click element identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:21:53.763163" elapsed="1.193778"/>
+<status status="PASS" start="2024-10-04T01:23:23.549204" elapsed="0.789827"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
-<msg time="2024-10-04T00:21:54.958638" level="INFO">${el1} = accessibility_id=input-email</msg>
+<msg time="2024-10-04T01:23:24.339387" level="INFO">${el1} = accessibility_id=input-email</msg>
 <var>${el1}</var>
 <arg>accessibility_id=input-email</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2024-10-04T00:21:54.957883" elapsed="0.000826"/>
+<status status="PASS" start="2024-10-04T01:23:24.339175" elapsed="0.000237"/>
 </kw>
 <kw name="Input Text" owner="AppiumLibrary">
-<msg time="2024-10-04T00:21:54.961258" level="INFO">Typing text 'email1teste123@bol.com' into text field 'accessibility_id=input-email'</msg>
+<msg time="2024-10-04T01:23:24.340510" level="INFO">Typing text 'email1teste123@bol.com' into text field 'accessibility_id=input-email'</msg>
 <arg>${el1}</arg>
 <arg>email1teste123@bol.com</arg>
 <doc>Types the given `text` into text field identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:21:54.959172" elapsed="4.691444"/>
+<status status="PASS" start="2024-10-04T01:23:24.339505" elapsed="2.911783"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
-<msg time="2024-10-04T00:21:59.815004" level="INFO">${el2} = accessibility_id=input-password</msg>
+<msg time="2024-10-04T01:23:27.251796" level="INFO">${el2} = accessibility_id=input-password</msg>
 <var>${el2}</var>
 <arg>accessibility_id=input-password</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2024-10-04T00:21:59.814081" elapsed="0.000957"/>
+<status status="PASS" start="2024-10-04T01:23:27.251581" elapsed="0.000237"/>
 </kw>
 <kw name="Input Text" owner="AppiumLibrary">
-<msg time="2024-10-04T00:21:59.818310" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-password'</msg>
+<msg time="2024-10-04T01:23:27.253494" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-password'</msg>
 <arg>${el2}</arg>
 <arg>teste123</arg>
 <doc>Types the given `text` into text field identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:21:59.815160" elapsed="2.574170"/>
+<status status="PASS" start="2024-10-04T01:23:27.252310" elapsed="1.931773"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
-<msg time="2024-10-04T00:22:02.389713" level="INFO">${el3} = accessibility_id=input-repeat-password</msg>
+<msg time="2024-10-04T01:23:29.184896" level="INFO">${el3} = accessibility_id=input-repeat-password</msg>
 <var>${el3}</var>
 <arg>accessibility_id=input-repeat-password</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2024-10-04T00:22:02.389520" elapsed="0.000214"/>
+<status status="PASS" start="2024-10-04T01:23:29.184533" elapsed="0.000388"/>
 </kw>
 <kw name="Input Text" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:02.405649" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-repeat-password'</msg>
+<msg time="2024-10-04T01:23:29.186650" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-repeat-password'</msg>
 <arg>${el3}</arg>
 <arg>teste123</arg>
 <doc>Types the given `text` into text field identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:02.389821" elapsed="2.063382"/>
+<status status="PASS" start="2024-10-04T01:23:29.185028" elapsed="1.063531"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
-<msg time="2024-10-04T00:22:04.454539" level="INFO">${el4} = xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]</msg>
+<msg time="2024-10-04T01:23:30.249858" level="INFO">${el4} = css=*[name="SIGN UP"]</msg>
 <var>${el4}</var>
-<arg>xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]</arg>
+<arg>css=*[name="SIGN UP"]</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2024-10-04T00:22:04.453956" elapsed="0.000606"/>
+<status status="PASS" start="2024-10-04T01:23:30.249296" elapsed="0.000621"/>
 </kw>
 <kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:06.528090" level="INFO">xpath criteria: //XCUIElementTypeStaticText[@name="SIGN UP"]</msg>
 <arg>${el4}</arg>
 <doc>Waits until element specified with `locator` appears on current page.</doc>
-<status status="PASS" start="2024-10-04T00:22:04.454667" elapsed="2.074162"/>
+<status status="PASS" start="2024-10-04T01:23:30.250374" elapsed="0.302285"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:06.541464" level="INFO">Clicking element 'xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]'.</msg>
-<msg time="2024-10-04T00:22:08.158639" level="INFO">xpath criteria: //XCUIElementTypeStaticText[@name="SIGN UP"]</msg>
+<msg time="2024-10-04T01:23:30.554276" level="INFO">Clicking element 'css=*[name="SIGN UP"]'.</msg>
 <arg>${el4}</arg>
 <doc>Click element identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:06.529749" elapsed="1.628990"/>
+<status status="PASS" start="2024-10-04T01:23:30.553114" elapsed="0.777925"/>
 </kw>
 <kw name="Close All Applications" owner="AppiumLibrary" type="TEARDOWN">
 <doc>Closes all open applications.</doc>
-<status status="PASS" start="2024-10-04T00:22:08.162423" elapsed="1.071183"/>
+<status status="PASS" start="2024-10-04T01:23:31.331588" elapsed="1.152759"/>
 </kw>
-<status status="PASS" start="2024-10-04T00:14:47.541519" elapsed="441.692315"/>
+<status status="PASS" start="2024-10-04T01:14:29.328416" elapsed="543.156008"/>
 </test>
 <test id="s1-s1-t2" name="Test refatorado com page objects" line="56">
 <kw name="Open Application" owner="AppiumLibrary" type="SETUP">
@@ -148,75 +146,73 @@ Please check https://appium.io/docs/en/2.1/cli/args/
 | remote_url          | Yes    | Appium server url |
 | alias               | no     | alias             |
 | strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
-<status status="PASS" start="2024-10-04T00:22:09.236291" elapsed="30.010016"/>
+<status status="PASS" start="2024-10-04T01:23:32.486115" elapsed="38.383426"/>
 </kw>
 <kw name="Dado que estou na tela de cadastro" owner="signupPage">
 <kw name="Click Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:39.285658" level="INFO">Clicking element 'accessibility_id=Login'.</msg>
+<msg time="2024-10-04T01:24:10.893409" level="INFO">Clicking element 'accessibility_id=Login'.</msg>
 <arg>${LOGIN_OPTION}</arg>
 <doc>Click element identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:39.275665" elapsed="1.217148"/>
+<status status="PASS" start="2024-10-04T01:24:10.890646" elapsed="3.898533"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:40.501349" level="INFO">Clicking element 'chain=**/XCUIElementTypeStaticText[`name == "Sign up"`]'.</msg>
+<msg time="2024-10-04T01:24:14.797006" level="INFO">Clicking element 'css=*[name="Sign up"]'.</msg>
 <arg>${SIGN_UP_OPTION}</arg>
 <doc>Click element identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:40.493105" elapsed="3.123391"/>
+<status status="PASS" start="2024-10-04T01:24:14.790577" elapsed="2.854087"/>
 </kw>
-<status status="PASS" start="2024-10-04T00:22:39.266406" elapsed="4.353548"/>
+<status status="PASS" start="2024-10-04T01:24:10.888453" elapsed="6.756633"/>
 </kw>
 <kw name="Quando preencho as credenciais validas" owner="signupPage">
 <kw name="Input Text" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:43.833978" level="INFO">Typing text 'email1teste123@bol.com' into text field 'accessibility_id=input-email'</msg>
+<msg time="2024-10-04T01:24:17.738466" level="INFO">Typing text 'email1teste123@bol.com' into text field 'accessibility_id=input-email'</msg>
 <arg>${EMAIL_FIELD}</arg>
 <arg>text=${EMAIL_FIELD_ARG}</arg>
 <doc>Types the given `text` into text field identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:43.657377" elapsed="4.382317"/>
+<status status="PASS" start="2024-10-04T01:24:17.645925" elapsed="3.953204"/>
 </kw>
 <kw name="Input Text" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:48.127911" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-password'</msg>
+<msg time="2024-10-04T01:24:21.632175" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-password'</msg>
 <arg>${PASSWORD_FIELD}</arg>
 <arg>text=${PASSWORD_FIELD_ARG}</arg>
 <doc>Types the given `text` into text field identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:48.041870" elapsed="4.066254"/>
+<status status="PASS" start="2024-10-04T01:24:21.605617" elapsed="2.177990"/>
 </kw>
 <kw name="Input Text" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:52.247453" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-repeat-password'</msg>
+<msg time="2024-10-04T01:24:23.788607" level="INFO">Typing text 'teste123' into text field 'accessibility_id=input-repeat-password'</msg>
 <arg>${REPEAT_PASSWORD_FIELD}</arg>
 <arg>text=${REPEAT_PASSWORD_FIELD_ARG}</arg>
 <doc>Types the given `text` into text field identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:52.236431" elapsed="1.803150"/>
+<status status="PASS" start="2024-10-04T01:24:23.783876" elapsed="1.451967"/>
 </kw>
 <arg>email1teste123@bol.com</arg>
 <arg>teste123</arg>
 <arg>teste123</arg>
-<status status="PASS" start="2024-10-04T00:22:43.626841" elapsed="10.413152"/>
+<status status="PASS" start="2024-10-04T01:24:17.645503" elapsed="7.590675"/>
 </kw>
 <kw name="E submeto o cadastro" owner="signupPage">
 <kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:54.737572" level="INFO">xpath criteria: //XCUIElementTypeStaticText[@name="SIGN UP"]</msg>
 <arg>${SIGNUP_BTN}</arg>
 <doc>Waits until element specified with `locator` appears on current page.</doc>
-<status status="PASS" start="2024-10-04T00:22:54.040990" elapsed="0.696665"/>
+<status status="PASS" start="2024-10-04T01:24:25.239078" elapsed="0.277065"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<msg time="2024-10-04T00:22:54.738699" level="INFO">Clicking element 'xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]'.</msg>
-<msg time="2024-10-04T00:22:55.860239" level="INFO">xpath criteria: //XCUIElementTypeStaticText[@name="SIGN UP"]</msg>
+<msg time="2024-10-04T01:24:25.519120" level="INFO">Clicking element 'css=*[name="SIGN UP"]'.</msg>
 <arg>${SIGNUP_BTN}</arg>
 <doc>Click element identified by `locator`.</doc>
-<status status="PASS" start="2024-10-04T00:22:54.737800" elapsed="1.122540"/>
+<status status="PASS" start="2024-10-04T01:24:25.516350" elapsed="0.890393"/>
 </kw>
-<status status="PASS" start="2024-10-04T00:22:54.040583" elapsed="1.819878"/>
+<status status="PASS" start="2024-10-04T01:24:25.237604" elapsed="1.169237"/>
 </kw>
 <kw name="Close All Applications" owner="AppiumLibrary" type="TEARDOWN">
 <doc>Closes all open applications.</doc>
-<status status="PASS" start="2024-10-04T00:22:55.861615" elapsed="1.231810"/>
+<status status="PASS" start="2024-10-04T01:24:26.407525" elapsed="1.249766"/>
 </kw>
-<status status="PASS" start="2024-10-04T00:22:09.235592" elapsed="47.858082"/>
+<status status="PASS" start="2024-10-04T01:23:32.485566" elapsed="55.172012"/>
 </test>
-<status status="PASS" start="2024-10-04T00:14:47.213274" elapsed="489.882087"/>
+<status status="PASS" start="2024-10-04T01:14:28.660523" elapsed="598.999846"/>
 </suite>
-<status status="PASS" start="2024-10-04T00:14:47.168097" elapsed="489.929064"/>
+<status status="PASS" start="2024-10-04T01:14:28.631997" elapsed="599.029719"/>
 </suite>
 <statistics>
 <total>
