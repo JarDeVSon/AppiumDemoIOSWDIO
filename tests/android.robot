@@ -22,7 +22,7 @@ Test Setup        Open Application
     ...    appium:newCommandTimeout=${3600}    
     ...    appium:connectHardwareKeyboard=${True}
 Test Teardown     Close All Applications
-Resource    ../resources/pages/signupPage.resource
+Resource    ../resources/pages/signupPageAndroid.resource
 
 
 

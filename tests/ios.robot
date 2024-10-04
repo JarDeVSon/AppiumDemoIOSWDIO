@@ -30,7 +30,8 @@ Test Setup        Open Application
 ...    appium:connectHardwareKeyboard=${True}    
 ...    disableIdLocatorAutocompletion=${True}
 Test Teardown     Close All Applications
-Resource    ../resources/pages/signupPage.resource
+Resource    ../resources/pages/signupPageIOS.resource
+
 *** Variables ***
 ${UDID}    5FBB2585-CE24-4954-ABE6-95B257451381
 
