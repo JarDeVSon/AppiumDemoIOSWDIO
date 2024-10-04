@@ -22,6 +22,16 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,9 +39,15 @@ jobs:
       - name: Install Appium
         run: |
           npm install -g appium@latest
+
+      - name: Install UiAutomator2 Driver for Appium
+        run: |
+          appium driver install uiautomator2
+  
       - name: Install XCUITest Driver for Appium
         run: |
           appium driver install xcuitest
+
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -72,20 +88,38 @@ jobs:
 
           xcrun simctl bootstatus "$UDID" -b
 
-          sleep 360  # Tempo adicional para garantir que o simulador esteja ativo
+          sleep 300  # Tempo adicional para garantir que o simulador esteja ativo
           
-      - name: Wait for Appium server
+      - name: Wait for Appium server for iOS
+        run: |
+          nohup appium &> appium.log &
+          # Wait for Appium to be ready
+          while ! nc -z localhost 4725; do
+            echo "Waiting for Appium to start...";
+            sleep 5;
+          done
+      - name: Wait for Appium server for Android
         run: |
           nohup appium &> appium.log &
           # Wait for Appium to be ready
           while ! nc -z localhost 4723; do
             echo "Waiting for Appium to start...";
             sleep 5;
-          done
+          done          
       - name: Run iOS Tests
         run: |
           export UDID=${{ env.UDID }} 
           robot -d ./reports -v UDID:${{ env.UDID }} tests/ios.robot
+
+      - name: Run Android Emulator And Run Android Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
+          script: |
+            robot -d ./reports tests/android.robot          
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
