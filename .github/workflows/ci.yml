@@ -1,4 +1,5 @@
-name: Continuous Integration - iOS
+name: Continuous Integration - iOS and Android
+
 'on':
   push:
     branches:
@@ -7,57 +8,56 @@ name: Continuous Integration - iOS
     branches:
       - main
   workflow_dispatch: null
+
 jobs:
   execute_test:
     runs-on: macos-latest
     permissions:
       contents: write
+
     steps:
       - uses: actions/checkout@v4
+      
       - name: Use Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: 3.9
           cache: pip
+
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install Appium
         run: |
           npm install -g appium@latest
 
-      - name: Install UiAutomator2 Driver for Appium
-        run: |
-          appium driver install uiautomator2
-  
       - name: Install XCUITest Driver for Appium
         run: |
           appium driver install xcuitest
+
+      - name: Install Android UIAutomator2 Driver for Appium
+        run: |
+          appium driver install uiautomator2
 
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest
+
       - name: Clone WebDriverAgent
         run: |
           git clone https://github.com/appium/WebDriverAgent.git
           cd WebDriverAgent
+
       - name: Accept Xcode License
         run: sudo xcodebuild -license accept
+
       - name: Build WebDriverAgent for Testing
         run: |
           cd WebDriverAgent
@@ -69,55 +69,59 @@ jobs:
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
+
       - name: Get UDID of iPhone 16
         id: udid
-        run: >
-          UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1
-          "Booted" | awk -F '[()]' '{print $2}')
-
+        run: |
+          UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Booted" | awk -F '[()]' '{print $2}')
           if [ -z "$UDID" ]; then
             UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
           fi
-          
-
           echo "UDID=$UDID" >> $GITHUB_ENV
-
+          xcrun simctl erase "$UDID"
           xcrun simctl boot "$UDID"
-
           xcrun simctl bootstatus "$UDID" -b
+          sleep 300  # Tempo adicional para garantir que o simulador esteja ativo
 
-          sleep 360  # Tempo adicional para garantir que o simulador esteja ativo
-          
+      - name: Set up Java for Android Tests
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 33
+          platform: android-33
+          ndk: true
+
       - name: Wait for Appium server for iOS
         run: |
-          nohup appium &> appium.log &
-          # Wait for Appium to be ready
+          nohup appium --port 4725 &> appium_ios.log &
+          # Wait for Appium iOS to be ready
           while ! nc -z localhost 4725; do
-            echo "Waiting for Appium to start...";
+            echo "Waiting for Appium (iOS) to start...";
             sleep 5;
           done
+
       - name: Wait for Appium server for Android
         run: |
-          nohup appium &> appium.log &
-          # Wait for Appium to be ready
+          nohup appium --port 4723 &> appium_android.log &
+          # Wait for Appium Android to be ready
           while ! nc -z localhost 4723; do
-            echo "Waiting for Appium to start...";
+            echo "Waiting for Appium (Android) to start...";
             sleep 5;
-          done          
-      - name: Run iOS Tests
-        run: |
-          export UDID=${{ env.UDID }} 
-          robot -d ./reports -v UDID:${{ env.UDID }} tests/ios.robot
+          done
 
-      - name: Run Android Emulator And Run Android Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          target: google_apis
-          arch: x86_64
-          profile: pixel_3
-          script: |
-            robot -d ./reports tests/android.robot          
+      - name: Run Tests in Parallel with Pabot
+        run: |
+          export UDID=${{ env.UDID }}
+          # Execute iOS tests with UDID and Android tests without it
+          pabot --processes 2 \
+            --variable UDID:${{ env.UDID }} \
+            --outputdir reports \
+            tests/ios.robot tests/android.robot
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -126,7 +130,7 @@ jobs:
           name: reports
           path: reports/
           
-      - name: Implantar Resultados no Github Pages
+      - name: Deploy Results to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'

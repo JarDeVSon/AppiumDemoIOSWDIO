@@ -22,6 +22,7 @@ Test Setup        Open Application
     ...    appium:newCommandTimeout=${3600}    
     ...    appium:connectHardwareKeyboard=${True}
 Test Teardown     Close All Applications
+Resource    ../resources/pages/signupPage.resource
 
 
 
@@ -44,3 +45,9 @@ Test Appium Recorder Android
     Wait Until Page Contains Element    ${el6}
     Click Element    ${el6}
 
+
+Test refatorado com page objects
+    Dado que estou na tela de cadastro
+    Quando preencho as credenciais validas     email1teste123@bol.com    teste123    teste123
+    E submeto o cadastro
+    # Entao devo ver a mensagem de cadastro realizado com sucesso    #You successfully signed up!

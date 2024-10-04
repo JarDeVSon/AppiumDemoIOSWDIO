@@ -5,7 +5,9 @@ Library    AppiumLibrary
 *** Keywords ***
 
 Dado que estou na tela de cadastro
+    Wait Until Page Contains Element      ${LOGIN_OPTION}
     Click Element    ${LOGIN_OPTION}
+    Wait Until Page Contains Element    ${SIGN_UP_OPTION}
     Click Element    ${SIGN_UP_OPTION}
 
 Quando preencho as credenciais validas
