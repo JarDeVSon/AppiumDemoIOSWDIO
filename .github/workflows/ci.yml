@@ -62,8 +62,11 @@ jobs:
           if [ -z "$UDID" ]; then
             UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
           fi
+          
 
           echo "UDID=$UDID" >> $GITHUB_ENV
+
+          xcrun simctl erase "$UDID"
 
           xcrun simctl boot "$UDID"
 
