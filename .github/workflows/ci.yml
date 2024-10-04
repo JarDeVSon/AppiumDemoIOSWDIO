@@ -107,14 +107,18 @@ jobs:
         run: |
           emulator -list-avds
 
+      - name: Check Available System Images
+        run: |
+          sdkmanager --list
+
       - name: Create Android AVD
         run: |
-          echo "no" | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --install "system-images;android-35;google_apis;x86"
-          avdmanager create avd -n Medium_Phone_API_35 -k "system-images;android-35;google_apis;x86" --device "pixel" --force
+          echo "no" | sdkmanager --install "system-images;android-30;google_apis;x86" || echo "Failed to install Android 30 image"
+          avdmanager create avd -n Medium_Phone_API_30 -k "system-images;android-30;google_apis;x86" --device "pixel" --force || echo "Failed to create AVD"
 
       - name: Start Android Emulator
         run: |
-          emulator -avd Medium_Phone_API_35 -no-snapshot-load &
+          emulator -avd Medium_Phone_API_30 -no-snapshot-load &
           # Aguardar o emulador iniciar
           TIMEOUT=300  # 5 minutos
           COUNTER=0
