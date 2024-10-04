@@ -111,10 +111,13 @@ jobs:
         run: |
           sdkmanager --list
 
+      - name: Install ARM64 Android Image
+        run: |
+          sdkmanager --install "system-images;android-30;google_apis;arm64-v8a"
+
       - name: Create Android AVD
         run: |
-          echo "no" | sdkmanager --install "system-images;android-30;google_apis;x86" || echo "Failed to install Android 30 image"
-          avdmanager create avd -n Medium_Phone_API_30 -k "system-images;android-30;google_apis;x86" --device "pixel" --force || echo "Failed to create AVD"
+          echo "no" | avdmanager create avd -n Medium_Phone_API_30 -k "system-images;android-30;google_apis;arm64-v8a" --device "pixel" --force
 
       - name: Start Android Emulator
         run: |
