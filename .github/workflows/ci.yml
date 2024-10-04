@@ -102,9 +102,6 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-        with:
-        api-level: '34'  # Ajuste para a versão da API que deseja usar
-          enable-sdk-manager: true
 
       - name: Wait for Appium server for iOS
         run: |
