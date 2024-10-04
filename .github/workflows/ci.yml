@@ -102,9 +102,15 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          api-level: '35'  # Ajuste para a versão da API que deseja usar
-          enable-sdk-manager: true
+
+      - name: List Available AVDs
+        run: |
+          emulator -list-avds
+
+      - name: Create Android AVD
+        run: |
+          echo "no" | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --install "system-images;android-35;google_apis;x86"
+          avdmanager create avd -n Medium_Phone_API_35 -k "system-images;android-35;google_apis;x86" --device "pixel" --force
 
       - name: Start Android Emulator
         run: |
