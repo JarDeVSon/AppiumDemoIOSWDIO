@@ -88,7 +88,7 @@ jobs:
           while ! xcrun simctl bootstatus "$UDID" -b; do
             sleep 1
             COUNTER=$((COUNTER + 1))
-            if [ $COUNTER -ge $TIMEOUT ]; então
+            if [ $COUNTER -ge $TIMEOUT ]; then
               echo "Timeout waiting for iOS simulator to boot."
               exit 1
             fi
@@ -121,7 +121,7 @@ jobs:
 
       - name: Start Android Emulator
         run: |
-          $ANDROID_HOME/emulator/emulator -avd Medium_Phone_API_30 -no-snapshot-load &
+          emulator -avd Medium_Phone_API_30 -no-snapshot-load &
           # Aguardar o emulador iniciar
           TIMEOUT=300  # 5 minutos
           COUNTER=0
