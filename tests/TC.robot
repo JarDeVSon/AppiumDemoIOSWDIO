@@ -38,7 +38,7 @@ ${UDID}    5FBB2585-CE24-4954-ABE6-95B257451381
 Test Recorder Appium 1
     ${el1} =    Set Variable     accessibility_id=Login
     Click Element    ${el1}
-    ${el2} =    Set Variable     chain=**/XCUIElementTypeStaticText[`name == "Sign up"`]
+    ${el2} =    Set Variable     css=*[name="Sign up"]
     Click Element    ${el2}
     ${el1} =    Set Variable     accessibility_id=input-email
     Input Text    ${el1}    email1teste123@bol.com
@@ -46,7 +46,7 @@ Test Recorder Appium 1
     Input Text    ${el2}    teste123
     ${el3} =    Set Variable     accessibility_id=input-repeat-password
     Input Text    ${el3}    teste123
-    ${el4} =    Set Variable     xpath=//XCUIElementTypeStaticText[@name="SIGN UP"]
+    ${el4} =    Set Variable     css=*[name="SIGN UP"]
     Wait Until Page Contains Element  ${el4}
     Click Element    ${el4}
 
