@@ -21,7 +21,7 @@ E submeto o cadastro
     Click Element    ${ANDROID_SIGNUP_BTN} 
 
 Entao devo ver a mensagem de cadastro realizado com sucesso
-    # [Arguments]    ${EXPECTED}
+    [Arguments]    ${EXPECTED}
     Wait Until Page Contains Element    ${ANDROID_OK_BTN} 
-    # Element Text Should Be    ${ANDROID_SUCCESS_TXT}   ${EXPECTED}
+    Element Text Should Be    ${ANDROID_SUCCESS_TXT}   ${EXPECTED}
     Click Element   ${ANDROID_OK_BTN} 

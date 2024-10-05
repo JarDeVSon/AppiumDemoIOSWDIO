@@ -21,7 +21,7 @@ E submeto o cadastro
     Click Element   ${IOS_SIGNUP_BTN} 
 
 Entao devo ver a mensagem de cadastro realizado com sucesso
-    # [Arguments]    ${EXPECTED}
+    [Arguments]    ${EXPECTED}
     Wait Until Page Contains Element   ${IOS_OK_BTN} 
-    # Element Text Should Be    ${IOS_SUCCESS_TXT}    ${EXPECTED}
+    Element Text Should Be    ${IOS_SUCCESS_TXT}    ${EXPECTED}
     Click Element   ${IOS_OK_BTN}
