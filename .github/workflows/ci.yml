@@ -142,9 +142,14 @@ jobs:
         run: |
           emulator -list-avds
           
+      - name: Create AVD
+        run: |
+          echo "Creating AVD android_virtual_device..."
+          echo "no" | avdmanager create avd -n android_virtual_device -k "system-images;android-33;google_apis;x86_64" --device "default"
+
       - name: Start Emulator
         run: |
-          emulator -avd pixel_3 -no-window -gpu swiftshader_indirect &
+          emulator -avd android_virtual_device -no-window -gpu swiftshader_indirect &
           adb wait-for-device
           adb shell getprop init.svc.bootanim
                        
@@ -157,7 +162,7 @@ jobs:
           api-level: 33
           target: google_apis
           arch: ${{ env.ARCHITECTURE == 'aarch64' && 'arm64-v8a' || 'x86_64' }}
-          profile: pixel_3
+          profile: android_virtual_device
           cores: 2
           ram-size: 4096M
           sdcard-path-or-size: 512M
