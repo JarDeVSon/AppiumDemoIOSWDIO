@@ -107,6 +107,16 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_3
+          cores: 2
+          ram-size: 4096
+          heap-size: 512
+          sdcard-path: '100M'
+          disk-size: 10G
+          avd-name: test
+          force-avd-creation: true
+          emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim'
+          boot-timeout: 600
+          disable-animations: true           
  
       - name: Wait for Appium server for iOS
         run: |
