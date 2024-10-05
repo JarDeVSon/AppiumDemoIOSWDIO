@@ -165,6 +165,7 @@ jobs:
           script: |
             adb kill-server
             adb start-server
+            adb wait-for-device
             adb devices
             adb -s emulator-5554 shell getprop sys.boot_completed
 
