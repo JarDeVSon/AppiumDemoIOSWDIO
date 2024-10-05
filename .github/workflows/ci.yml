@@ -113,7 +113,7 @@ jobs:
 
       - name: Start Android Emulator
         run: |
-          $ANDROID_HOME/emulator/emulator -avd Medium_Phone_API_30 -no-snapshot-load &
+          $ANDROID_HOME/emulator/emulator -avd Medium_Phone_API_30 -gpu swiftshader_indirect -no-snapshot-load &
           # Aguardar o emulador iniciar
           TIMEOUT=300  # 5 minutos
           COUNTER=0
