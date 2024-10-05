@@ -134,13 +134,13 @@ jobs:
           emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim'
           boot-timeout: 600
           disable-animations: true
-          run: |
+          script: |
             export UDID=${{ env.UDID }}
             # Execute iOS tests with UDID and Android tests without it
             pabot --processes 2 \
-            --variable UDID:${{ env.UDID }} \
-            --outputdir reports \
-            tests/ios.robot tests/android.robot
+              --variable UDID:${{ env.UDID }} \
+              --outputdir reports \
+              tests/ios.robot tests/android.robot
 
       # - name: Run Tests in Parallel with Pabot
       #   run: |
