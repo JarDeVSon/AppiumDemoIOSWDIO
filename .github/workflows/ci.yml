@@ -124,17 +124,19 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          target: google_apis
+          target: default
           arch: arm64-v8a
           profile: pixel_3
           cores: 2
           ram-size: 4096M
           sdcard-path-or-size: 512M
+          emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-accel'
           disk-size: 20G
           script: |
             adb kill-server
             adb start-server
-            sdkmanager --update
+            adb devices
+            adb -s emulator-5554 shell getprop sys.boot_completed
 
         env:
           ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
