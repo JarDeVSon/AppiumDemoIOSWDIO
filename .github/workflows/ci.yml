@@ -118,6 +118,12 @@ jobs:
             sleep 5;
           done
 
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -134,22 +140,23 @@ jobs:
           emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -accel off'
           disable-animations: true
           script: |
-            export UDID=${{ env.UDID }}
-            # Execute iOS tests with UDID and Android tests without it
-            pabot --processes 2 \
-              --variable UDID:${{ env.UDID }} \
-              --outputdir reports \
-              tests/ios.robot tests/android.robot
+            adb kill-server
+            adb start-server
+            sdkmanager --update
+
+
         env:
-          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 60
-      # - name: Run Tests in Parallel with Pabot
-      #   run: |
-      #     export UDID=${{ env.UDID }}
-      #     # Execute iOS tests with UDID and Android tests without it
-      #     pabot --processes 2 \
-      #       --variable UDID:${{ env.UDID }} \
-      #       --outputdir reports \
-      #       tests/ios.robot tests/android.robot
+          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
+
+      - name: Run Tests in Parallel with Pabot
+        run: |
+          export UDID=${{ env.UDID }}
+          # Execute iOS tests with UDID and Android tests without it
+          pabot --processes 2 \
+            --variable UDID:${{ env.UDID }} \
+            --outputdir reports \
+            tests/ios.robot tests/android.robot
+            
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
