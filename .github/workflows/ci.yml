@@ -141,17 +141,22 @@ jobs:
       - name: List Available Emulators
         run: |
           emulator -list-avds
-          
+
+      - name: Create AVD
+        run: |
+          echo "Creating AVD android_virtual_device..."
+          echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;arm64-v8a" --device "Nexus 6" --force
+                 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         env:
           ANDROID_ADB_SERVER_PORT: 5038
           ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
         with:
-          api-level: 33
+          api-level: 34
           target: google_apis
           arch: ${{ env.ARCHITECTURE == 'arm64' && 'arm64-v8a' || 'x86_64' }}
-          profile: Nexus_5
+          profile: pixel_3
           cores: 2
           ram-size: 4096M
           sdcard-path-or-size: 512M
