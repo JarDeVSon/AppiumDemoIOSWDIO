@@ -145,7 +145,7 @@ jobs:
       - name: Create AVD
         run: |
           echo "Creating AVD android_virtual_device..."
-          echo "no" | avdmanager create avd -n android_virtual_device -k "system-images;android-33;google_apis;arm64-v8a" --device "default"
+          echo "no" | avdmanager create avd -n android_virtual_device -k "system-images;android-33;google_apis;x86_64" --device "default"
 
       - name: Start Emulator
         run: |
