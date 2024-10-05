@@ -101,7 +101,7 @@ jobs:
           distribution: 'temurin'   
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-         
+
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
@@ -128,18 +128,13 @@ jobs:
           arch: arm64-v8a
           profile: pixel_3
           cores: 2
-          ram-size: 2048M
+          ram-size: 4096M
           sdcard-path-or-size: 512M
           disk-size: 20G
-          avd-name: test
-          force-avd-creation: true
-          emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -accel off'
-          disable-animations: true
           script: |
             adb kill-server
             adb start-server
             sdkmanager --update
-
 
         env:
           ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
