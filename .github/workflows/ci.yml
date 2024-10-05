@@ -137,11 +137,21 @@ jobs:
           else
             sdkmanager --install 'system-images;android-33;google_apis;x86_64' --channel=3
 
+      - name: List Available Emulators
+        run: |
+          emulator -list-avds
+          
+      - name: Start Emulator
+        run: |
+              emulator -avd pixel_3 -no-window -gpu swiftshader_indirect &
+              adb wait-for-device
+              adb shell getprop init.svc.bootanim
+                       
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         env:
           ANDROID_ADB_SERVER_PORT: 5038
-          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
+          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
         with:
           api-level: 33
           target: google_apis
@@ -153,6 +163,7 @@ jobs:
           emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-accel'
           disk-size: 20G
           script: |
+            adb kill-server
             adb start-server
             adb devices
             adb -s emulator-5554 shell getprop sys.boot_completed
