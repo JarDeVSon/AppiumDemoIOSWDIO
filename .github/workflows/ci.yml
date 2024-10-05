@@ -136,17 +136,12 @@ jobs:
             sdkmanager --install 'system-images;android-33;google_apis;arm64-v8a' --channel=3
           else
             sdkmanager --install 'system-images;android-33;google_apis;x86_64' --channel=3
+          fi
 
       - name: List Available Emulators
         run: |
           emulator -list-avds
           
-      - name: Start Emulator
-        run: |
-              emulator -avd pixel_3 -no-window -gpu swiftshader_indirect &
-              adb wait-for-device
-              adb shell getprop init.svc.bootanim
-                       
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         env:
@@ -171,7 +166,7 @@ jobs:
       - name: Run Tests in Parallel with Pabot
         run: |
           export UDID=${{ env.UDID }}
-          # Execute iOS tests with UDID and Android tests without it
+          # Execute iOS tests com UDID e Android tests sem UDID
           pabot --processes 2 \
             --variable UDID:${{ env.UDID }} \
             --outputdir reports \
