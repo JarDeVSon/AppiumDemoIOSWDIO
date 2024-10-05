@@ -99,8 +99,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'   
+          
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Accept Android SDK Licenses
+        run: sdkmanager --licenses
 
       - name: Wait for Appium server for iOS
         run: |
@@ -120,14 +124,17 @@ jobs:
             sleep 5;
           done
 
+      - name: Install system image
+        run: sdkmanager --install 'system-images;android-33;google_apis;x86_64' --channel=3
+
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         env:
           ANDROID_ADB_SERVER_PORT: 5038
           ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
         with:
-          api-level: 34
-          target: default
+          api-level: 33
+          target: google_apis
           arch: x86_64
           profile: pixel_3
           cores: 2
@@ -136,11 +143,10 @@ jobs:
           emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-accel'
           disk-size: 20G
           script: |
+            adb kill-server
             adb start-server
             adb devices
             adb -s emulator-5554 shell getprop sys.boot_completed
-
-
 
       - name: Run Tests in Parallel with Pabot
         run: |
