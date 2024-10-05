@@ -117,6 +117,7 @@ jobs:
             echo "Waiting for Appium (Android) to start...";
             sleep 5;
           done
+
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -149,7 +150,6 @@ jobs:
       #       --variable UDID:${{ env.UDID }} \
       #       --outputdir reports \
       #       tests/ios.robot tests/android.robot
-
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
