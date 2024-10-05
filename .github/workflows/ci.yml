@@ -100,32 +100,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install ARM64 Android Image
-        run: |
-          sdkmanager --install "system-images;android-30;google_apis;arm64-v8a"
-
-      - name: Create Android AVD
-        run: |
-          echo "no" | avdmanager create avd -n Generic_Emulator -k "system-images;android-30;google_apis;arm64-v8a" --device "pixel" --force
-
-      - name: Start Android Emulator
-        run: |
-          $ANDROID_HOME/emulator/emulator -avd Generic_Emulator -gpu host -no-snapshot-load &
-          # Aguardar o emulador iniciar
-          TIMEOUT=300  # 5 minutos
-          COUNTER=0
-          while ! adb shell getprop sys.boot_completed | grep -m 1 '1'; do
-            sleep 1
-            COUNTER=$((COUNTER + 1))
-            if [ $COUNTER -ge $TIMEOUT ]; then
-              echo "Timeout waiting for Android emulator to boot."
-              exit 1
-            fi
-          done
-
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
+ 
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
