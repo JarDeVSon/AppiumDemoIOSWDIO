@@ -131,7 +131,7 @@ jobs:
 
       - name: Start Android Emulator
         run: |
-          nohup emulator -avd pixel_3 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> /dev/null &
+          nohup emulator -avd pixel_3 --port 5038 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> /dev/null &
           # Wait for emulator to fully boot
           adb wait-for-device
           boot_completed=""
