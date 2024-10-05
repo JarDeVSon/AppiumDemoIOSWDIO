@@ -98,25 +98,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'
-
-      - name: Run Android Emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          target: google_apis
-          arch: x86_64
-          profile: pixel_3
-          cores: 2
-          ram-size: 4096
-          heap-size: 512
-          sdcard-path: '100M'
-          disk-size: 10G
-          avd-name: test
-          force-avd-creation: true
-          emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim'
-          boot-timeout: 600
-          disable-animations: true           
+          distribution: 'temurin'   
  
       - name: Wait for Appium server for iOS
         run: |
@@ -135,15 +117,39 @@ jobs:
             echo "Waiting for Appium (Android) to start...";
             sleep 5;
           done
-
-      - name: Run Tests in Parallel with Pabot
-        run: |
-          export UDID=${{ env.UDID }}
-          # Execute iOS tests with UDID and Android tests without it
-          pabot --processes 2 \
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
+          cores: 2
+          ram-size: 4096
+          heap-size: 512
+          sdcard-path: '100M'
+          disk-size: 10G
+          avd-name: test
+          force-avd-creation: true
+          emulator-options: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim'
+          boot-timeout: 600
+          disable-animations: true
+          run: |
+            export UDID=${{ env.UDID }}
+            # Execute iOS tests with UDID and Android tests without it
+            pabot --processes 2 \
             --variable UDID:${{ env.UDID }} \
             --outputdir reports \
             tests/ios.robot tests/android.robot
+
+      # - name: Run Tests in Parallel with Pabot
+      #   run: |
+      #     export UDID=${{ env.UDID }}
+      #     # Execute iOS tests with UDID and Android tests without it
+      #     pabot --processes 2 \
+      #       --variable UDID:${{ env.UDID }} \
+      #       --outputdir reports \
+      #       tests/ios.robot tests/android.robot
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
