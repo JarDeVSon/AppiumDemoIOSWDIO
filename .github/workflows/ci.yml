@@ -122,6 +122,9 @@ jobs:
 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          ANDROID_ADB_SERVER_PORT: 5038
+          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
         with:
           api-level: 34
           target: default
@@ -137,8 +140,7 @@ jobs:
             adb devices
             adb -s emulator-5554 shell getprop sys.boot_completed
 
-        env:
-          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 120
+
 
       - name: Run Tests in Parallel with Pabot
         run: |
