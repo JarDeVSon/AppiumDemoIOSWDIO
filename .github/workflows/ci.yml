@@ -80,7 +80,7 @@ jobs:
           echo "UDID=$UDID" >> $GITHUB_ENV
           xcrun simctl erase "$UDID"
           xcrun simctl boot "$UDID"
-          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl bootstatus "$UDID"
           
           # Timeout para aguardar o boot do simulador
           TIMEOUT=300  # 5 minutos
@@ -109,7 +109,7 @@ jobs:
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
-          # Wait for Appium iOS to be ready
+          # Wait for Appium iOS to estar pronto
           while ! nc -z localhost 4725; do
             echo "Waiting for Appium (iOS) to start...";
             sleep 5;
@@ -118,7 +118,7 @@ jobs:
       - name: Wait for Appium server for Android
         run: |
           nohup appium --port 4723 &> appium_android.log &
-          # Wait for Appium Android to be ready
+          # Wait for Appium Android to estar pronto
           while ! nc -z localhost 4723; do
             echo "Waiting for Appium (Android) to start...";
             sleep 5;
@@ -145,7 +145,11 @@ jobs:
       - name: Create AVD
         run: |
           echo "Creating AVD android_virtual_device..."
-          echo "no" | avdmanager create avd -n android_virtual_device -k "system-images;android-33;google_apis;x86_64" --device "default"
+          if [ "${{ env.ARCHITECTURE }}" == "arm64" ]; then
+            echo "no" | avdmanager create avd -n android_virtual_device -k "system-images;android-33;google_apis;arm64-v8a" --device "pixel"
+          else
+            echo "no" | avdmanager create avd -n android_virtual_device -k "system-images;android-33;google_apis;x86_64" --device "pixel"
+          fi
 
       - name: Start Emulator
         run: |
