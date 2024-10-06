@@ -135,20 +135,17 @@ jobs:
 
       - name: Create AVD
         run: |
-          echo "Creating AVD if not exists..."
           if avdmanager list avd | grep -q "pixel_3"; then
             echo "AVD already exists, skipping creation."
           else
-            if [ "${{ env.ARCHITECTURE }}" == "arm64" ]; then
-              echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;arm64-v8a" --device "pixel" --force
-            else
-              echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;x86_64" --device "pixel" --force
-            fi
+            avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;${{ env.ARCHITECTURE }}" --device "pixel" --force
           fi
 
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator on port 5037..."
+          adb kill-server
+          adb start-server
           nohup emulator -avd pixel_3 -port 5037 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
 
           # Verifica se o arquivo qemu-system-aarch64 existe no local esperado
@@ -159,12 +156,11 @@ jobs:
 
           # Check emulator log for troubleshooting
           tail -f emulator.log &
-          
-          # Wait for emulator to fully boot
-          adb kill-server
-          adb start-server
-          adb connect localhost:5037
           adb wait-for-device
+
+          # Wait for emulator to fully boot
+
+          adb connect localhost:5037
 
           boot_completed=""
           timeout=360  # 6 minutos para o boot
