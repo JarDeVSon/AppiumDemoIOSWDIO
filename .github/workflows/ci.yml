@@ -140,13 +140,18 @@ jobs:
             echo "$available_avds"
           fi
 
-      - name: Create AVD
+      - name: Create Android Virtual Device
         run: |
           if avdmanager list avd | grep -q "pixel_3"; then
             echo "AVD already exists, skipping creation."
           else
-            avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;arm64-v8a --device "pixel" --force
+            avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;arm64-v8a" --device "pixel" --force
           fi
+        shell: /bin/bash -e {0}
+        env:
+          pythonLocation: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
+          PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.9.13/arm64/lib/pkgconfig
+          Python_ROOT_DIR: /Users/runner/
 
       - name: Start Android Emulator
         run: |
