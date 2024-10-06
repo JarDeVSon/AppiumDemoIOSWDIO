@@ -111,6 +111,7 @@ jobs:
           brew install --cask android-studio
           brew install qt
           export QT_HOME=$(brew --prefix qt)
+          export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$QT_HOME/bin:$PATH"
 
       - name: Detect Host Architecture
@@ -131,17 +132,21 @@ jobs:
         run: |
           echo "Creating AVD android_virtual_device..."
           if [ "${{ env.ARCHITECTURE }}" == "arm64" ]; then
-            echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;arm64-v8a" --device "Nexus 6" --force
+            echo "no" | avdmanager create avd -n Nexus_6 -k "system-images;android-33;google_apis;arm64-v8a" --device "Nexus 6" --force
           else
-            echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;x86_64" --device "Nexus 6" --force
+            echo "no" | avdmanager create avd -n Nexus_6 -k "system-images;android-33;google_apis;x86_64" --device "Nexus 6" --force
           fi
 
       - name: Start Android Emulator
         run: |
-          echo "Starting Android Emulator on port 5037..."
-          nohup emulator -avd pixel_3 -port 5037 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
+          nohup emulator -avd Nexus_6 -port 5037 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
           
-          # Check emulator log for troubleshooting
+          # Verifica se o arquivo qemu-system-aarch64 existe
+          if [ ! -f "$ANDROID_HOME/emulator/qemu/darwin-x86_64/qemu-system-aarch64" ]; then
+            echo "QEMU executável não encontrado no caminho esperado!"
+            exit 1
+          fi          # Check emulator log for troubleshooting
+
           tail -f emulator.log &
 
           # Wait for emulator to fully boot
