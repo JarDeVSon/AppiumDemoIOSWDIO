@@ -104,7 +104,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Accept Android SDK Licenses
-        run: yes | sdkmanager --licenses
+        run: yes | sdkmanager --licenses && sdkmanager --update
 
       - name: Install Android Studio and Emulator Dependencies via Brew
         run: |
