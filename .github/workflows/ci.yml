@@ -83,7 +83,7 @@ jobs:
           xcrun simctl bootstatus "$UDID" -b
           
           # Timeout para aguardar o boot do simulador
-          TIMEOUT=300  # 5 minutos
+          TIMEOUT=360  # 6 minutos
           COUNTER=0
           while ! xcrun simctl bootstatus "$UDID" -b; do
             sleep 1
@@ -105,6 +105,13 @@ jobs:
 
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses
+
+      - name: Install Android Studio and Emulator Dependencies via Brew
+        run: |
+          brew install --cask android-studio
+          brew install qt
+          export QT_HOME=$(brew --prefix qt)
+          export PATH="$QT_HOME/bin:$PATH"
 
       - name: Detect Host Architecture
         id: arch
@@ -128,15 +135,10 @@ jobs:
           else
             echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;x86_64" --device "Nexus 6" --force
           fi
-      - name: Install Qt and Emulator Dependencies
-        run: |
-          brew install qt
-          export QT_HOME=$(brew --prefix qt)
-          export PATH="$QT_HOME/bin:$PATH"
 
       - name: Start Android Emulator
         run: |
-          echo "Starting Android Emulator on port 5038..."
+          echo "Starting Android Emulator on port 5037..."
           nohup emulator -avd pixel_3 -port 5037 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
           
           # Check emulator log for troubleshooting
@@ -149,7 +151,7 @@ jobs:
           adb wait-for-device
 
           boot_completed=""
-          timeout=300  # 20 minutos para o boot
+          timeout=360  # 6 minutos para o boot
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
             boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
             echo "Waiting for emulator to complete boot... ($timeout seconds left)"
