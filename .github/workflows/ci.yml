@@ -128,7 +128,12 @@ jobs:
           else
             echo "no" | avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;x86_64" --device "Nexus 6" --force
           fi
-
+      - name: Install Qt and Emulator Dependencies
+        run: |
+          brew install qt
+          export QT_HOME=$(brew --prefix qt)
+          export PATH="$QT_HOME/bin:$PATH"
+          
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator on port 5038..."
@@ -156,7 +161,6 @@ jobs:
             exit 1
           fi
           echo "Emulator boot completed successfully!"
-
 
       - name: Wait for Appium server for iOS
         run: |
