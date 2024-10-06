@@ -133,11 +133,11 @@ jobs:
           brew install qt
           export QT_HOME=$(brew --prefix qt)
           export PATH="$QT_HOME/bin:$PATH"
-          
+
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator on port 5038..."
-          nohup emulator -avd pixel_3 -port 5038 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
+          nohup emulator -avd pixel_3 -port 5037 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
           
           # Check emulator log for troubleshooting
           tail -f emulator.log &
@@ -145,11 +145,11 @@ jobs:
           # Wait for emulator to fully boot
           adb kill-server
           adb start-server
-          adb connect localhost:5038
+          adb connect localhost:5037
           adb wait-for-device
 
           boot_completed=""
-          timeout=1200  # 20 minutos para o boot
+          timeout=300  # 20 minutos para o boot
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
             boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
             echo "Waiting for emulator to complete boot... ($timeout seconds left)"
