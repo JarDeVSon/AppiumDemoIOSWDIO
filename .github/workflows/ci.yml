@@ -131,14 +131,21 @@ jobs:
       - name: List Available AVDs
         run: |
           echo "Listing available AVDs..."
-          avdmanager list avd
+          available_avds=$(avdmanager list avd | grep -oP '(?<=Name: ).*')
+          
+          if [ -z "$available_avds" ]; then
+            echo "No AVDs available."
+          else
+            echo "Available AVDs:"
+            echo "$available_avds"
+          fi
 
       - name: Create AVD
         run: |
           if avdmanager list avd | grep -q "pixel_3"; then
             echo "AVD already exists, skipping creation."
           else
-            avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;${{ env.ARCHITECTURE }}" --device "pixel" --force
+            avdmanager create avd -n pixel_3 -k "system-images;android-33;google_apis;arm64-v8a --device "pixel" --force
           fi
 
       - name: Start Android Emulator
