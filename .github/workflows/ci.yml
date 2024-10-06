@@ -131,13 +131,23 @@ jobs:
 
       - name: Start Android Emulator
         run: |
-          nohup emulator -avd pixel_3 --port 5038 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> /dev/null &
+          echo "Starting Android Emulator on port 5038..."
+          nohup emulator -avd pixel_3 -port 5038 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
+          
+          # Check emulator log for troubleshooting
+          tail -f emulator.log &
+
           # Wait for emulator to fully boot
+          adb kill-server
+          adb start-server
+          adb connect localhost:5038
           adb wait-for-device
+
           boot_completed=""
-          timeout=600
+          timeout=1200  # 20 minutos para o boot
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
             boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
+            echo "Waiting for emulator to complete boot... ($timeout seconds left)"
             sleep 1
             timeout=$((timeout - 1))
           done
@@ -145,6 +155,8 @@ jobs:
             echo "Emulator boot timed out"
             exit 1
           fi
+          echo "Emulator boot completed successfully!"
+
 
       - name: Wait for Appium server for iOS
         run: |
