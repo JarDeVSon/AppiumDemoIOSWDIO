@@ -131,7 +131,7 @@ jobs:
       - name: List Available AVDs
         run: |
           echo "Listing available AVDs..."
-          available_avds=$(avdmanager list avd | grep "Name:" | awk '{print $2}')
+          available_avds=$(avdmanager list avd | grep -oP '(?<=Name: ).*')
           
           if [ -z "$available_avds" ]; then
             echo "No AVDs available."
@@ -139,6 +139,7 @@ jobs:
             echo "Available AVDs:"
             echo "$available_avds"
           fi
+
 
       - name: Create Android Virtual Device
         run: |
@@ -156,37 +157,44 @@ jobs:
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator on port 5037..."
+          
+          # Kill any existing ADB server and start a new one
           adb kill-server
           adb start-server
-          nohup emulator -avd pixel_3 -port 5037 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
-
-          # Verifica se o arquivo qemu-system-aarch64 existe no local esperado
-          if [ ! -f "$ANDROID_HOME/emulator/qemu/darwin-aarch64/qemu-system-aarch64" ]; then
-            echo "QEMU executável não encontrado no caminho esperado!"
-            exit 1
-          fi
-
-          # Check emulator log for troubleshooting
-          tail -f emulator.log &
-          adb wait-for-device
-
+          
+          # Start the emulator
+          emulator -avd pixel_3 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
+          
           # Wait for emulator to fully boot
-
-          adb connect localhost:5037
-
           boot_completed=""
-          timeout=360  # 6 minutos para o boot
+          timeout=360  # 6 minutes for the boot
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
             boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
             echo "Waiting for emulator to complete boot... ($timeout seconds left)"
             sleep 1
             timeout=$((timeout - 1))
           done
+          
           if [ "$boot_completed" != "1" ]; then
             echo "Emulator boot timed out"
             exit 1
           fi
           echo "Emulator boot completed successfully!"
+        shell: /bin/bash -e {0}
+        env:
+          pythonLocation: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
+          PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.9.13/arm64/lib/pkgconfig
+          Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
+          Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
+          Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
+          MD_APPLE_SDK_ROOT: /Applications/Xcode_16.1_beta_2.app
+          UDID: DD4C1068-E089-45B0-9652-F481433D021E
+          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.12-7/arm64/Contents/Home
+          JAVA_HOME_17_ARM64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.12-7/arm64/Contents/Home
+          ANDROID_HOME: /Users/runner/Library/Android/sdk
+          ANDROID_SDK_ROOT: /Users/runner/Library/Android/sdk
+          ARCHITECTURE: arm64
+
 
 
 
