@@ -163,14 +163,18 @@ jobs:
           PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.9.13/arm64/lib/pkgconfig
           Python_ROOT_DIR: /Users/runner/
 
+      - name: Install Android SDK dependencies
+        run: |
+          sdkmanager --update
+          sdkmanager --install "platform-tools" "emulator" "system-images;android-33;google_apis;arm64-v8a"
+
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator..."
-          
           adb kill-server
           adb start-server
           
-          # Start the emulator
+          # Start the emulator with x86_64 architecture
           emulator -avd pixel_3 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
           
           # Wait for emulator to boot
@@ -183,8 +187,7 @@ jobs:
             timeout=$((timeout - 1))
           done
           
-          # Check emulator status and devices
-          adb devices
+          adb devices  # List devices to check connection
           
           if [ "$boot_completed" != "1" ]; then
             echo "Emulator boot timed out"
@@ -193,7 +196,8 @@ jobs:
           fi
           
           echo "Emulator boot completed successfully!"
-          
+
+
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
