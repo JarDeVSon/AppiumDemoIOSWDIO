@@ -165,16 +165,15 @@ jobs:
 
       - name: Start Android Emulator
         run: |
-          echo "Starting Android Emulator on port 5037..."
+          echo "Starting Android Emulator..."
           
-          # Kill any existing ADB server and start a new one
           adb kill-server
           adb start-server
           
           # Start the emulator
           emulator -avd pixel_3 -no-window -gpu swiftshader_indirect -no-boot-anim -noaudio -no-snapshot &> emulator.log &
           
-          # Wait for emulator to fully boot
+          # Wait for emulator to boot
           boot_completed=""
           timeout=360  # 6 minutes for the boot
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
@@ -184,29 +183,17 @@ jobs:
             timeout=$((timeout - 1))
           done
           
+          # Check emulator status and devices
+          adb devices
+          
           if [ "$boot_completed" != "1" ]; then
             echo "Emulator boot timed out"
+            tail -n 50 emulator.log  # Show emulator logs if boot fails
             exit 1
           fi
+          
           echo "Emulator boot completed successfully!"
-        shell: /bin/bash -e {0}
-        env:
-          pythonLocation: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
-          PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.9.13/arm64/lib/pkgconfig
-          Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
-          Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
-          Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
-          MD_APPLE_SDK_ROOT: /Applications/Xcode_16.1_beta_2.app
-          UDID: DD4C1068-E089-45B0-9652-F481433D021E
-          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.12-7/arm64/Contents/Home
-          JAVA_HOME_17_ARM64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.12-7/arm64/Contents/Home
-          ANDROID_HOME: /Users/runner/Library/Android/sdk
-          ANDROID_SDK_ROOT: /Users/runner/Library/Android/sdk
-          ARCHITECTURE: arm64
-
-
-
-
+          
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
