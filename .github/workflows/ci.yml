@@ -131,7 +131,7 @@ jobs:
       - name: List Available AVDs
         run: |
           echo "Listing available AVDs..."
-          available_avds=$(avdmanager list avd | grep -oP '(?<=Name: ).*')
+          available_avds=$(avdmanager list avd | sed -n 's/^ *Name: \(.*\)/\1/p')
           
           if [ -z "$available_avds" ]; then
             echo "No AVDs available."
