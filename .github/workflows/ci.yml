@@ -127,6 +127,15 @@ jobs:
           else
             sdkmanager --install 'system-images;android-33;google_apis;x86_64' --channel=3
           fi
+      - name: Check Android SDK tools
+        run: |
+          echo "Checking if avdmanager is available..."
+          if ! command -v avdmanager &> /dev/null; then
+            echo "avdmanager could not be found!"
+            exit 1
+          else
+            echo "avdmanager is available."
+          fi
 
       - name: List Available AVDs
         run: |
