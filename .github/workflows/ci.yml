@@ -114,6 +114,15 @@ jobs:
           export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$ANDROID_EMULATOR_QT_PATH:$PATH
           export ANDROID_EMULATOR_QEMU_PATH=/path/to/arm64/qemu
+          
+      - name: Configure Qt for QtCreator
+        run: |
+          # Adiciona o caminho do Qt ao QtCreator
+          echo 'You can add Homebrew's Qt to QtCreator's "Qt Versions" in:'
+          echo 'Preferences > Qt Versions > Link with Qt...'
+          echo 'Press "Choose..." and select as the Qt installation path:'
+          echo '/opt/homebrew'
+          echo 'If needed, configure manually in your local environment.'    
 
       - name: Detect Host Architecture
         id: arch
