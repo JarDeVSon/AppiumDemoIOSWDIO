@@ -180,7 +180,7 @@ jobs:
           
           # Wait for emulator to boot
           boot_completed=""
-          timeout=360  # 6 minutes for the boot
+          timeout=480  # 8 minutes for the boot
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
             boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
             echo "Waiting for emulator to complete boot... ($timeout seconds left)"
