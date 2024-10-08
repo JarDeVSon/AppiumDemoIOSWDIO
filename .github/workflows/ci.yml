@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Use Python 3.9
         uses: actions/setup-python@v5
         with:
@@ -27,7 +27,6 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -36,15 +35,12 @@ jobs:
       - name: Install Appium
         run: |
           npm install -g appium@latest
-
       - name: Install XCUITest Driver for Appium
         run: |
           appium driver install xcuitest
-
       - name: Install Android UIAutomator2 Driver for Appium
         run: |
           appium driver install uiautomator2
-
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -54,7 +50,6 @@ jobs:
         run: |
           git clone https://github.com/appium/WebDriverAgent.git
           cd WebDriverAgent
-
       - name: Accept Xcode License
         run: sudo xcodebuild -license accept
 
@@ -69,7 +64,6 @@ jobs:
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
-
       - name: Get UDID of iPhone 16
         id: udid
         run: |
@@ -93,13 +87,12 @@ jobs:
               exit 1
             fi
           done
-
       - name: Set up Java for Android Tests
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'   
-          
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3.2.1
       - run: sdkmanager tools platform-tools
@@ -111,32 +104,21 @@ jobs:
         run: |
           brew install --cask android-studio
           brew install qt
-          export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/libexec
-          export PATH="$ANDROID_EMULATOR_QT_PATH:$PATH
-          export ANDROID_EMULATOR_QEMU_PATH=/path/to/arm64/qemu
-
-      - name: Configure Qt for QtCreator
-        run: |
-          # Adiciona o caminho do Qt ao QtCreator
-          echo 'You can add Homebrew's Qt to QtCreator's "Qt Versions" in:'
-          echo 'Preferences > Qt Versions > Link with Qt...'
-          echo 'Press "Choose..." and select as the Qt installation path:'
-          echo '/opt/homebrew'
-          echo 'If needed, configure manually in your local environment.'    
-
+          export QT_HOME=$(brew --prefix qt)
+          export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
+          export PATH="$QT_HOME/bin:$PATH"
       - name: Detect Host Architecture
         id: arch
         run: |
           arch=$(uname -m)
           echo "ARCHITECTURE=$arch" >> $GITHUB_ENV
-
       - name: Install system image for correct architecture
         run: |
           if [ "${{ env.ARCHITECTURE }}" == "arm64" ]; then
-            sdkmanager --install 'system-images;android-30;google_apis;arm64-v8a' --channel=3
+            sdkmanager --install 'system-images;android-30;google_apis;arm64-v8a'
             sdkmanager --install "emulator" "platform-tools" "platforms;android-30"
           else
-            sdkmanager --install 'system-images;android-30;google_apis;arm64-v8a' --channel=3
+            sdkmanager --install 'system-images;android-30;google_apis;arm64-v8a'
             sdkmanager --install "emulator" "platform-tools" "platforms;android-30"
           fi
       - name: Check Android SDK tools
@@ -148,7 +130,6 @@ jobs:
           else
             echo "avdmanager is available."
           fi
-
       - name: List Available AVDs
         run: |
           echo "Listing available AVDs..."
@@ -160,8 +141,6 @@ jobs:
             echo "Available AVDs:"
             echo "$available_avds"
           fi
-
-
       - name: Create Android Virtual Device
         run: |
           if avdmanager list avd | grep -q "pixel_3"; then
@@ -179,16 +158,13 @@ jobs:
         run: |
           sdkmanager --update
           sdkmanager --install "platform-tools" "emulator" "system-images;android-33;google_apis;arm64-v8a"
-
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator..."
           adb start-server
           
           # Start the emulator with arm64-v8a architecture
-
           emulator -avd pixel_3 -no-boot-anim -gpu swiftshader_indirect -no-audio -no-window &
-
           
           # Wait for emulator to boot
           boot_completed=""
@@ -209,8 +185,6 @@ jobs:
           fi
           
           echo "Emulator boot completed successfully!"
-
-
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
@@ -219,7 +193,6 @@ jobs:
             echo "Waiting for Appium (iOS) to start...";
             sleep 5;
           done
-
       - name: Wait for Appium server for Android
         run: |
           nohup appium --port 4723 &> appium_android.log &
@@ -228,7 +201,6 @@ jobs:
             echo "Waiting for Appium (Android) to start...";
             sleep 5;
           done
-
       - name: Run Tests in Parallel with Pabot
         run: |
           export UDID=${{ env.UDID }}
@@ -244,7 +216,7 @@ jobs:
         with:
           name: reports
           path: reports/
-          
+
       - name: Deploy Results to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
