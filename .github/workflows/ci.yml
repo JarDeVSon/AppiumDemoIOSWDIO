@@ -107,6 +107,8 @@ jobs:
           export QT_HOME=$(brew --prefix qt)
           export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$QT_HOME/bin:$PATH"
+          export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/local/opt/qt/plugins
+
       - name: Detect Host Architecture
         id: arch
         run: |
@@ -114,13 +116,12 @@ jobs:
           echo "ARCHITECTURE=$arch" >> $GITHUB_ENV
       - name: Install system image for correct architecture
         run: |
-          if [ "${{ env.ARCHITECTURE }}" == "arm64" ]; then
-            sdkmanager --install 'system-images;android-30;google_apis;arm64-v8a'
-            sdkmanager --install "emulator" "platform-tools" "platforms;android-30"
-          else
-            sdkmanager --install 'system-images;android-30;google_apis;arm64-v8a'
-            sdkmanager --install "emulator" "platform-tools" "platforms;android-30"
-          fi
+          sdkmanager --update
+          sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
+          sdkmanager "emulator" "platform-tools" "system-images;android-30;google_apis;arm64-v8a"
+          which emulator
+     
+        
       - name: Check Android SDK tools
         run: |
           echo "Checking if avdmanager is available..."
@@ -154,10 +155,7 @@ jobs:
           PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.9.13/arm64/lib/pkgconfig
           Python_ROOT_DIR: /Users/runner/
 
-      - name: Install Android SDK dependencies
-        run: |
-          sdkmanager --update
-          sdkmanager --install "platform-tools" "emulator" "system-images;android-33;google_apis;arm64-v8a"
+
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator..."
