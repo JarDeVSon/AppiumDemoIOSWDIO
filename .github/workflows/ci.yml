@@ -112,6 +112,8 @@ jobs:
           export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$QT_HOME/bin:$PATH"
           export QT_QPA_PLATFORM_PLUGIN_PATH=$(brew --prefix qt)/plugins/
+          export ANDROID_HOME=/usr/local/share/android-sdk
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
           echo 'export ANDROID_HOME=/usr/local/share/android-sdk' >> $GITHUB_ENV
           echo 'export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH' >> $GITHUB_ENV
           echo 'export PATH=$ANDROID_HOME/platform-tools:$PATH' >> $GITHUB_ENV
