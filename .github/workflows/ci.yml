@@ -112,6 +112,11 @@ jobs:
           profile: Nexus 6
           script: |
             echo "Run Android Emulator is running....."
+            export UDID=${{ env.UDID }}
+            pabot --processes 2 \
+            --variable UDID:${{ env.UDID }} \
+            --outputdir reports \
+            tests/ios.robot tests/android.robot
 
 
       - name: Accept Android SDK Licenses
