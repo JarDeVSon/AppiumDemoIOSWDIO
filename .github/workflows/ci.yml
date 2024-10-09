@@ -102,7 +102,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3.2.1
 
-      - run: sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
+      - run: sdkmanager --install "cmdline-tools;latest" "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
 
       - name: Install Android Studio and Emulator Dependencies via Brew
         run: |
