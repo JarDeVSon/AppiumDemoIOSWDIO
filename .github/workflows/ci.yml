@@ -27,6 +27,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -35,12 +36,15 @@ jobs:
       - name: Install Appium
         run: |
           npm install -g appium@latest
+
       - name: Install XCUITest Driver for Appium
         run: |
           appium driver install xcuitest
+
       - name: Install Android UIAutomator2 Driver for Appium
         run: |
           appium driver install uiautomator2
+
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -50,6 +54,7 @@ jobs:
         run: |
           git clone https://github.com/appium/WebDriverAgent.git
           cd WebDriverAgent
+
       - name: Accept Xcode License
         run: sudo xcodebuild -license accept
 
@@ -60,10 +65,11 @@ jobs:
             -scheme WebDriverAgentRunner \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
             build-for-testing
-            
+
       - name: List Available Simulators
         run: |
           xcrun simctl list devices
+
       - name: Get UDID of iPhone 16
         id: udid
         run: |
@@ -75,8 +81,7 @@ jobs:
           xcrun simctl erase "$UDID"
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
-          
-          # Timeout para aguardar o boot do simulador
+
           TIMEOUT=360  # 6 minutos
           COUNTER=0
           while ! xcrun simctl bootstatus "$UDID" -b; do
@@ -87,14 +92,16 @@ jobs:
               exit 1
             fi
           done
+
       - name: Set up Java for Android Tests
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'   
+          distribution: 'temurin'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3.2.1
+
       - run: sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
 
       - name: Accept Android SDK Licenses
@@ -119,9 +126,8 @@ jobs:
         run: |
           sdkmanager --update
           sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
-          sdkmanager "emulator" "platform-tools" "system-images;android-30;google_apis;arm64-v8a"
           which emulator
-        
+
       - name: Check Android SDK tools
         run: |
           echo "Checking if avdmanager is available..."
@@ -131,6 +137,7 @@ jobs:
           else
             echo "avdmanager is available."
           fi
+
       - name: List Available AVDs
         run: |
           echo "Listing available AVDs..."
@@ -142,6 +149,7 @@ jobs:
             echo "Available AVDs:"
             echo "$available_avds"
           fi
+
       - name: Create Android Virtual Device
         run: |
           if avdmanager list avd | grep -q "pixel_3"; then
@@ -149,65 +157,56 @@ jobs:
           else
             avdmanager create avd -n pixel_3 -k "system-images;android-30;google_apis;arm64-v8a" --device "pixel" --force
           fi
-        shell: /bin/bash -e {0}
-        env:
-          pythonLocation: /Users/runner/hostedtoolcache/Python/3.9.13/arm64
-          PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.9.13/arm64/lib/pkgconfig
-          Python_ROOT_DIR: /Users/runner/
-
 
       - name: Start Android Emulator
         run: |
           echo "Starting Android Emulator..."
           adb start-server
-          
-          # Start the emulator with arm64-v8a architecture
           emulator -avd pixel_3 -no-boot-anim -gpu swiftshader_indirect -no-audio -no-window &
-          
-          # Wait for emulator to boot
+
           boot_completed=""
-          timeout=480  # 8 minutes for the boot
+          timeout=480  # 8 minutos
           until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
             boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
             echo "Waiting for emulator to complete boot... ($timeout seconds left)"
             sleep 1
             timeout=$((timeout - 1))
           done
-          
-          adb devices  # List devices to check connection
-          
+
+          adb devices  # Check connection
+
           if [ "$boot_completed" != "1" ]; then
             echo "Emulator boot timed out"
-            tail -n 50 emulator.log  # Show emulator logs if boot fails
+            tail -n 50 emulator.log
             exit 1
+          else
+            echo "Emulator boot completed successfully!"
           fi
-          
-          echo "Emulator boot completed successfully!"
+
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
-          # Wait for Appium iOS to be ready
           while ! nc -z localhost 4725; do
             echo "Waiting for Appium (iOS) to start...";
             sleep 5;
           done
+
       - name: Wait for Appium server for Android
         run: |
           nohup appium --port 4723 &> appium_android.log &
-          # Wait for Appium Android to be ready
           while ! nc -z localhost 4723; do
             echo "Waiting for Appium (Android) to start...";
             sleep 5;
           done
+
       - name: Run Tests in Parallel with Pabot
         run: |
           export UDID=${{ env.UDID }}
-          # Execute iOS tests com UDID e Android tests sem UDID
           pabot --processes 2 \
             --variable UDID:${{ env.UDID }} \
             --outputdir reports \
             tests/ios.robot tests/android.robot
-            
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
