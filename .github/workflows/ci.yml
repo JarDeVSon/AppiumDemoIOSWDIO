@@ -110,6 +110,7 @@ jobs:
           brew install qt
           sdkmanager --install "cmdline-tools;latest"
           which sdkmanager
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
           export QT_HOME=$(brew --prefix qt)
           export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$QT_HOME/bin:$PATH"
