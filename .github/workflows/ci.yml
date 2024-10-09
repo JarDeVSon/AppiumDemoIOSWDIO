@@ -99,10 +99,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.2.1
+      # - name: Setup Android SDK
+      #   uses: android-actions/setup-android@v3.2.1
 
-      - run: sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
+      # - run: sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
 
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses && sdkmanager --update
@@ -122,11 +122,6 @@ jobs:
           arch=$(uname -m)
           echo "ARCHITECTURE=$arch" >> $GITHUB_ENV
 
-      - name: Install system image for correct architecture
-        run: |
-          sdkmanager --update
-          sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
-          which emulator
 
       - name: Check Android SDK tools
         run: |
