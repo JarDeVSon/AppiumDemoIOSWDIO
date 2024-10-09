@@ -104,9 +104,6 @@ jobs:
 
       # - run: sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
 
-      - name: Accept Android SDK Licenses
-        run: yes | sdkmanager --licenses && sdkmanager --update
-
       - name: Install Android Studio and Emulator Dependencies via Brew
         run: |
           brew install --cask android-studio
@@ -115,6 +112,9 @@ jobs:
           export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$QT_HOME/bin:$PATH"
           export QT_QPA_PLATFORM_PLUGIN_PATH=$(brew --prefix qt)/plugins/platforms
+
+      - name: Accept Android SDK Licenses
+        run: yes | sdkmanager --licenses && sdkmanager --update         
 
       - name: Detect Host Architecture
         id: arch
