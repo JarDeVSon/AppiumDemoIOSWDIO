@@ -107,7 +107,7 @@ jobs:
           export QT_HOME=$(brew --prefix qt)
           export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
           export PATH="$QT_HOME/bin:$PATH"
-          export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/local/opt/qt/plugins
+          export QT_QPA_PLATFORM_PLUGIN_PATH=$(brew --prefix qt)/plugins/platforms
 
       - name: Detect Host Architecture
         id: arch
