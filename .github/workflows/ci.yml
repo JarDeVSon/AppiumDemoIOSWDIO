@@ -102,89 +102,23 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3.2.1
 
-      - run: sdkmanager --install "cmdline-tools;latest" "platform-tools" "emulator" "system-images;android-30;google_apis;arm64-v8a"
+      - run: |
+          sdkmanager --install "cmdline-tools" "platform-tools" "emulator" "system-images;android-30;google_atd;arm64-v8a"
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_atd
+          arch: arm64-v8a
+          profile: pixel_3
+          script: |
+            echo "Run Android Emulator is running....."
 
-      - name: Install Android Studio and Emulator Dependencies via Brew
-        run: |
-          brew install --cask android-studio
-          brew install qt
-          sdkmanager --install "cmdline-tools;latest"
-          which sdkmanager
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-          export QT_HOME=$(brew --prefix qt)
-          export ANDROID_EMULATOR_QT_PATH=$(brew --prefix qt)/lib
-          export PATH="$QT_HOME/bin:$PATH"
-          export QT_QPA_PLATFORM_PLUGIN_PATH=$(brew --prefix qt)/plugins/
-          export ANDROID_HOME=/usr/local/share/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          echo 'export ANDROID_HOME=/usr/local/share/android-sdk' >> $GITHUB_ENV
-          echo 'export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH' >> $GITHUB_ENV
-          echo 'export PATH=$ANDROID_HOME/platform-tools:$PATH' >> $GITHUB_ENV
 
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses && sdkmanager --update         
 
-      - name: Detect Host Architecture
-        id: arch
-        run: |
-          arch=$(uname -m)
-          echo "ARCHITECTURE=$arch" >> $GITHUB_ENV
 
-
-      - name: Check Android SDK tools
-        run: |
-          echo "Checking if avdmanager is available..."
-          if ! command -v avdmanager &> /dev/null; then
-            echo "avdmanager could not be found!"
-            exit 1
-          else
-            echo "avdmanager is available."
-          fi
-
-      - name: List Available AVDs
-        run: |
-          echo "Listing available AVDs..."
-          available_avds=$(avdmanager list avd | sed -n 's/^ *Name: \(.*\)/\1/p')
-          
-          if [ -z "$available_avds" ]; then
-            echo "No AVDs available."
-          else
-            echo "Available AVDs:"
-            echo "$available_avds"
-          fi
-
-      - name: Create Android Virtual Device
-        run: |
-          if avdmanager list avd | grep -q "pixel_3"; then
-            echo "AVD already exists, skipping creation."
-          else
-            avdmanager create avd -n pixel_3 -k "system-images;android-30;google_apis;arm64-v8a" --device "pixel" --force
-          fi
-
-      - name: Start Android Emulator
-        run: |
-          echo "Starting Android Emulator..."
-          adb start-server
-          emulator -avd pixel_3 -no-boot-anim -gpu swiftshader_indirect -no-audio -no-window &
-
-          boot_completed=""
-          timeout=480  # 8 minutos
-          until [ "$boot_completed" = "1" ] || [ $timeout -le 0 ]; do
-            boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
-            echo "Waiting for emulator to complete boot... ($timeout seconds left)"
-            sleep 1
-            timeout=$((timeout - 1))
-          done
-
-          adb devices  # Check connection
-
-          if [ "$boot_completed" != "1" ]; then
-            echo "Emulator boot timed out"
-            tail -n 50 emulator.log
-            exit 1
-          else
-            echo "Emulator boot completed successfully!"
-          fi
 
       - name: Wait for Appium server for iOS
         run: |
