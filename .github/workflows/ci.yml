@@ -114,25 +114,15 @@ jobs:
           yes | sdkmanager --list
           yes | sdkmanager --licenses && sdkmanager --update
           echo "Pacotes SDK instalados."  
-
-      - name: Verificar pacotes SDK instalados
-        run: |
           echo "Verificando pacotes instalados..."
           sdkmanager --list
-
-      - name: Verificar diretório de imagens do sistema
-        run: |
           ls -la $ANDROID_HOME/system-images/android-30/android-wear/arm64-v8a/
           yes | sdkmanager --licenses
-        
-      - name: Create AVD
-        run: yes | avdmanager create avd --force -n test --abi 'android-wear/arm64-v8a' --package 'system-images;android-30;android-wear;arm64-v8a' --device 'Nexus 6'
-
-      - name: Start Android Emulator
-        run: |
+          echo "Criando emulador avd"
+          yes | avdmanager create avd --force -n test --abi 'android-wear/arm64-v8a' --package 'system-images;android-30;android-wear;arm64-v8a' --device 'Nexus 6'
           echo "Iniciando emulador..."
-          nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -gpu off -noaudio -no-boot-anim -camera-back none &
-          adb wait-for-device shell getprop sys.boot_completed || sleep 120
+          yes | nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -gpu off -noaudio -no-boot-anim -camera-back none &
+          yes | adb wait-for-device shell getprop sys.boot_completed || sleep 120
 
 
       - name: Wait for Appium server for iOS
