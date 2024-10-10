@@ -99,40 +99,34 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
       - name: Install Android SDK and Tools
         run: |
-          brew install --cask android-commandlinetools
-          mkdir -p "$ANDROID_HOME/cmdline-tools/latest"
-          curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-mac-8092744_latest.zip
-          unzip sdk-tools.zip -d "$ANDROID_HOME/cmdline-tools/latest"
+          mkdir -p $ANDROID_HOME
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          yes | sdkmanager --licenses
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "Instalando Android SDK e ferramentas..."
+          curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-mac-8092744_latest.zip
+          unzip sdk-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+          sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-30" "system-images;android-30;google_apis;x86_64" "emulator"
+          sdkmanager --list
+          echo "Pacotes SDK instalados."
 
+      - name: Verificar caminho do Android SDK
+        run: |
+          echo "Verificando ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+          ls -la $ANDROID_HOME
+          ls -la $ANDROID_HOME/system-images/android-30/google_apis/x86_64/
+        
       - name: Create AVD
         run: echo "no" | avdmanager create avd --force -n test --abi 'google_apis/x86_64' --package 'system-images;android-30;google_apis;x86_64' --device 'Nexus 6'
 
       - name: Start Android Emulator
         run: |
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          echo "Iniciando emulador..."
           nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -no-window -gpu off -noaudio -no-boot-anim -camera-back none &
           adb wait-for-device shell getprop sys.boot_completed || sleep 120
-
-      # - name: Run Android Emulator
-      #   uses: reactivecircus/android-emulator-runner@v2
-      #   with:
-      #     api-level: 30
-      #     target: google_apis
-      #     arch: x86_64
-      #     force-avd-creation: true
-      #     emulator-options: -gpu off -no-snapshot-save -no-window -noaudio -no-boot-anim -camera-back none
-      #     profile: Nexus 6
-      #     emulator-boot-timeout: 600
-      #     script: |
-      #       echo "Run Android Emulator is running....."
-      #       adb wait-for-device shell getprop sys.boot_completed || sleep 120
 
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses && sdkmanager --update
