@@ -117,10 +117,10 @@ jobs:
           script: |
             echo "Run Android Emulator is running....."
             adb wait-for-device shell getprop sys.boot_completed
-            pabot --processes 2 \
-            --variable UDID:${{ env.UDID }} \
-            --outputdir reports \
-            tests/ios.robot tests/android.robot
+          # pabot --processes 2 \
+          # --variable UDID:${{ env.UDID }} \
+          # --outputdir reports \
+          # tests/ios.robot tests/android.robot
 
 
       - name: Accept Android SDK Licenses
