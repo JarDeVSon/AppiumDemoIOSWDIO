@@ -114,10 +114,13 @@ jobs:
           sdkmanager --list
           echo "Pacotes SDK instalados."
 
-      - name: Verificar caminho do Android SDK
+      - name: Verificar pacotes SDK instalados
         run: |
-          echo "Verificando ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
-          ls -la $ANDROID_HOME
+          echo "Verificando pacotes instalados..."
+          sdkmanager --list
+
+      - name: Verificar diretório de imagens do sistema
+        run: |
           ls -la $ANDROID_HOME/system-images/android-30/google_apis/x86_64/
         
       - name: Create AVD
