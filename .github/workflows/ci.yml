@@ -81,7 +81,7 @@ jobs:
           xcrun simctl erase "$UDID"
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
-
+          export UDID=${{ env.UDID }}
           TIMEOUT=360  # 6 minutos
           COUNTER=0
           while ! xcrun simctl bootstatus "$UDID" -b; do
@@ -109,11 +109,11 @@ jobs:
           target: google_atd
           arch: arm64-v8a
           force-avd-creation: true
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-vulkan -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           profile: Nexus 6
+          emulator-boot-timeout: 600
           script: |
             echo "Run Android Emulator is running....."
-            export UDID=${{ env.UDID }}
             pabot --processes 2 \
             --variable UDID:${{ env.UDID }} \
             --outputdir reports \
