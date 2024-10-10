@@ -94,39 +94,37 @@ jobs:
           done
           export UDID=${{ env.UDID }}
 
-
       - name: Set up Java for Android Tests
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.2.1
+      - name: Install Android SDK
+        run: |
+          brew install --cask android-sdk
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-30" "system-images;android-30;google_apis;x86_64"
 
-      - name: Run Android Emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          target: google_apis
-          arch: x86_64
-          force-avd-creation: true
-          emulator-options: -gpu off -no-snapshot-save -no-window -noaudio -no-boot-anim -camera-back none
-          profile: Nexus 6
-          emulator-boot-timeout: 600
-          script: |
-            echo "Run Android Emulator is running....."
-            adb wait-for-device shell getprop sys.boot_completed || sleep 120
-          # pabot --processes 2 \
-          # --variable UDID:${{ env.UDID }} \
-          # --outputdir reports \
-          # tests/ios.robot tests/android.robot
+      - name: Create AVD
+        run: echo "no" | avdmanager create avd --force -n test --abi 'google_apis/x86_64' --package 'system-images;android-30;google_apis;x86_64' --device 'Nexus 6'
 
+      # - name: Run Android Emulator
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 30
+      #     target: google_apis
+      #     arch: x86_64
+      #     force-avd-creation: true
+      #     emulator-options: -gpu off -no-snapshot-save -no-window -noaudio -no-boot-anim -camera-back none
+      #     profile: Nexus 6
+      #     emulator-boot-timeout: 600
+      #     script: |
+      #       echo "Run Android Emulator is running....."
+      #       adb wait-for-device shell getprop sys.boot_completed || sleep 120
 
       - name: Accept Android SDK Licenses
-        run: yes | sdkmanager --licenses && sdkmanager --update         
-
-
+        run: yes | sdkmanager --licenses && sdkmanager --update
 
       - name: Wait for Appium server for iOS
         run: |
