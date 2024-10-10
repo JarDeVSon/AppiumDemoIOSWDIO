@@ -112,6 +112,7 @@ jobs:
           yes | sdkmanager --licenses && sdkmanager --update
           sdkmanager "platform-tools" "platforms;android-30" "system-images;android-30;google_apis;arm64-v8a" "emulator"
           sdkmanager --list
+          yes | sdkmanager --licenses && sdkmanager --update
           echo "Pacotes SDK instalados."
 
       - name: Verificar pacotes SDK instalados
@@ -122,6 +123,7 @@ jobs:
       - name: Verificar diretório de imagens do sistema
         run: |
           ls -la $ANDROID_HOME/system-images/android-30/google_apis/arm64-v8a/
+          yes | sdkmanager --licenses
         
       - name: Create AVD
         run: echo "no" | avdmanager create avd --force -n test --abi 'google_apis/arm64-v8a' --package 'system-images;android-30;google_apis;arm64-v8a' --device 'Nexus 6'
