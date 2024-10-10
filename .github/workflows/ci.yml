@@ -106,9 +106,12 @@ jobs:
           yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-30" "system-images;android-30;google_apis;x86_64" "emulator"
 
+      - name: Set ANDROID_SDK_ROOT
+        run: echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+        
       - name: Create AVD
         run: echo "no" | avdmanager create avd --force -n test --abi 'google_apis/x86_64' --package 'system-images;android-30;google_apis;x86_64' --device 'Nexus 6'
-        
+
       - name: Start Android Emulator
         run: |
           nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -no-window -gpu off -noaudio -no-boot-anim -camera-back none &
