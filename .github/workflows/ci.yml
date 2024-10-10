@@ -102,7 +102,7 @@ jobs:
 
       - name: Install Android SDK
         run: |
-          brew install --cask android-sdk
+          brew install --cask android-commandlinetools
           yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-30" "system-images;android-30;google_apis;x86_64"
 
