@@ -81,7 +81,7 @@ jobs:
           xcrun simctl erase "$UDID"
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
-          export UDID=${{ env.UDID }}
+
           TIMEOUT=360  # 6 minutos
           COUNTER=0
           while ! xcrun simctl bootstatus "$UDID" -b; do
@@ -92,6 +92,8 @@ jobs:
               exit 1
             fi
           done
+          export UDID=${{ env.UDID }}
+
 
       - name: Set up Java for Android Tests
         uses: actions/setup-java@v3
