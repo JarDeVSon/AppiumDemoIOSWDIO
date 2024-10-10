@@ -110,7 +110,7 @@ jobs:
           unzip sdk-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
           yes | sdkmanager --licenses && sdkmanager --update
-          sdkmanager "system-images;android-30;google_apis;arm64-v8a" "emulator"
+          sdkmanager "system-images;android-30;android-wear;arm64-v8a" "emulator"
           sdkmanager --list
           yes | sdkmanager --licenses && sdkmanager --update
           echo "Pacotes SDK instalados."  
@@ -122,11 +122,11 @@ jobs:
 
       - name: Verificar diretório de imagens do sistema
         run: |
-          ls -la $ANDROID_HOME/system-images/android-30/google_apis/arm64-v8a/
+          ls -la $ANDROID_HOME/system-images/android-30/android-wear/arm64-v8a/
           yes | sdkmanager --licenses
         
       - name: Create AVD
-        run: echo "no" | avdmanager create avd --force -n test --abi 'google_apis/arm64-v8a' --package 'system-images;android-30;google_apis;arm64-v8a' --device 'Nexus 6'
+        run: echo "no" | avdmanager create avd --force -n test --abi 'android-wear/arm64-v8a' --package 'system-images;android-30;android-wear;arm64-v8a' --device 'Nexus 6'
 
       - name: Start Android Emulator
         run: |
