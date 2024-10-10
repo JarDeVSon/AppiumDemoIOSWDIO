@@ -116,7 +116,7 @@ jobs:
           emulator-boot-timeout: 600
           script: |
             echo "Run Android Emulator is running....."
-            adb wait-for-device shell getprop sys.boot_completed
+            adb wait-for-device shell getprop sys.boot_completed || sleep 120
           # pabot --processes 2 \
           # --variable UDID:${{ env.UDID }} \
           # --outputdir reports \
