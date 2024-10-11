@@ -99,6 +99,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          
+      - name: Install Android SDK and Tools
+        run: |
       - name: Install Android SDK and Tools
         run: |
           brew install --cask android-commandlinetools
@@ -110,19 +113,20 @@ jobs:
           unzip sdk-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
           yes | sdkmanager --licenses && sdkmanager --update
-          yes | sdkmanager "system-images;android-30;google_apis;arm64-v8a" "emulator"
+          yes | sdkmanager "system-images;android-30;google_apis;x86_64" "emulator"
           yes | sdkmanager --list
           yes | sdkmanager --licenses && sdkmanager --update
           echo "Pacotes SDK instalados."  
           echo "Verificando pacotes instalados..."
           sdkmanager --list
-          ls -la $ANDROID_HOME/system-images/android-30/google_apis/arm64-v8a/
+          ls -la $ANDROID_HOME/system-images/android-30/google_apis/x86_64/
           yes | sdkmanager --licenses
           echo "Criando emulador avd"
-          yes | avdmanager create avd --force -n test --abi 'google_apis/arm64-v8a' --package 'system-images;android-30;google_apis;arm64-v8a' --device 'Nexus 6'
+          yes | avdmanager create avd --force -n test --abi 'google_apis/x86_64' --package 'system-images;android-30;google_apis;x86_64' --device 'Nexus 6'
           echo "Iniciando emulador..."
-          yes | nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -gpu off -no-vulkan -no-window -noaudio -no-boot-anim -camera-back none
+          yes | nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -gpu off -no-window -noaudio -no-boot-anim -camera-back none
           yes | adb wait-for-device shell getprop sys.boot_completed || sleep 120
+
 
 
       - name: Wait for Appium server for iOS
