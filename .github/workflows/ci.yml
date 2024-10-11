@@ -56,7 +56,8 @@ jobs:
           cd WebDriverAgent
 
       - name: Accept Xcode License
-        run: sudo xcodebuild -license accept
+        run: |
+          sudo xcodebuild -license accept
 
       - name: Build WebDriverAgent for Testing
         run: |
@@ -78,7 +79,7 @@ jobs:
             UDID=$(xcrun simctl list devices | grep "iPhone 16" | grep -m 1 "Shutdown" | awk -F '[()]' '{print $2}')
           fi
           echo "UDID=$UDID" >> $GITHUB_ENV
-          xcrun simctl erase "$UDID"
+          xcrun simctl erase "$UDID" || true  # Ignora erro se o dispositivo não existir
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
 
@@ -106,39 +107,47 @@ jobs:
           mkdir -p $ANDROID_HOME
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          echo "Instalando Android SDK e ferramentas..."
+          echo "Installing Android SDK and tools..."
           curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-mac-8092744_latest.zip
           unzip sdk-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
           yes | sdkmanager --licenses && sdkmanager --update
-          yes | sdkmanager "system-images;android-30;google_apis;arm64-v8a" "emulator"
+          yes | sdkmanager "system-images;android-30;google_apis;x86_64" "emulator"
           yes | sdkmanager --list
           yes | sdkmanager --licenses && sdkmanager --update
-          echo "Pacotes SDK instalados."  
-          echo "Verificando pacotes instalados..."
+          echo "SDK packages installed."  
+          echo "Checking installed packages..."
           sdkmanager --list
           ls -la $ANDROID_HOME/system-images/android-30/google_apis/x86_64/
           yes | sdkmanager --licenses
-          echo "Criando emulador avd"
+          echo "Creating emulator avd"
           avdmanager create avd --force -n test --abi 'google_apis/x86_64' --package 'system-images;android-30;google_apis;x86_64' --device 'Nexus 6'
-          echo "Iniciando emulador..."
-          nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save noaudio -no-boot-anim -camera-back none -no-accel & 
+          echo "Starting emulator..."
+          nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -noaudio -no-boot-anim -camera-back none -no-accel &
           adb wait-for-device shell getprop sys.boot_completed || sleep 120
 
       - name: Wait for Appium server for iOS
         run: |
           nohup appium --port 4725 &> appium_ios.log &
-          while ! nc -z localhost 4725; do
-            echo "Waiting for Appium (iOS) to start...";
-            sleep 5;
+          for i in {1..30}; do
+            if nc -z localhost 4725; then
+              echo "Appium (iOS) is ready."
+              break
+            fi
+            echo "Waiting for Appium (iOS) to start..."
+            sleep 5
           done
 
       - name: Wait for Appium server for Android
         run: |
           nohup appium --port 4723 &> appium_android.log &
-          while ! nc -z localhost 4723; do
-            echo "Waiting for Appium (Android) to start...";
-            sleep 5;
+          for i in {1..30}; do
+            if nc -z localhost 4723; then
+              echo "Appium (Android) is ready."
+              break
+            fi
+            echo "Waiting for Appium (Android) to start..."
+            sleep 5
           done
 
       - name: Run Tests in Parallel with Pabot
