@@ -121,8 +121,7 @@ jobs:
           echo "Criando emulador avd"
           yes | avdmanager create avd --force -n test --abi 'google_apis/arm64-v8a' --package 'system-images;android-30;google_apis;arm64-v8a' --device 'Nexus 6'
           echo "Iniciando emulador..."
-          yes | nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -gpu off -no-vulkan -no-window -noaudio -no-boot-anim -camera-back none &
-          yes | sdkmanager --licenses && sdkmanager --update
+          yes | nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -gpu off -no-vulkan -no-window -noaudio -no-boot-anim -camera-back none
           yes | adb wait-for-device shell getprop sys.boot_completed || sleep 120
 
 
